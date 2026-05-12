@@ -23,5 +23,6 @@ public class UsuarioRequestDTO {
     private String correo;
 
     @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, max = 255, message = "La contraseña debe tener entre 6 y 255 caracteres")
     private String contrasena;
 }
