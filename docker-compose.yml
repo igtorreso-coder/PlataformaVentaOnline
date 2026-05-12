@@ -1,0 +1,242 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: auth_db
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: user-service
+    working_dir: /app
+    volumes:
+      - ./UserServices:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usuarios_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_CATEGORIES_URL: http://category-service:8082
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  category-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: category-service
+    working_dir: /app
+    volumes:
+      - ./CategoryService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/categorias_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_USERS_URL: http://user-service:8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  product-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: product-service
+    working_dir: /app
+    volumes:
+      - ./ProductService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productos_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_CATEGORIES_URL: http://category-service:8082
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  inventory-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: inventory-service
+    working_dir: /app
+    volumes:
+      - ./InventoryService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/inventario_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_PRODUCTS_URL: http://product-service:8083
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  auth-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: auth-service
+    working_dir: /app
+    volumes:
+      - ./AuthService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/auth_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_USERS_URL: http://user-service:8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  cart-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: cart-service
+    working_dir: /app
+    volumes:
+      - ./CartService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8088:8088"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/carritos_db?useSSL=false&serverTimezone=America/Mexico_City&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      MICROSERVICIOS_USUARIOS_URL: http://user-service:8081
+      MICROSERVICIOS_PRODUCTOS_URL: http://product-service:8083
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  discount-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: discount-service
+    working_dir: /app
+    volumes:
+      - ./DiscountService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/descuentos_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  order-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: order-service
+    working_dir: /app
+    volumes:
+      - ./OrderService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pedidos_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_USERS_URL: http://user-service:8081
+      SERVICES_PRODUCTS_URL: http://product-service:8083
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  payment-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: payment-service
+    working_dir: /app
+    volumes:
+      - ./PaymentService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pagos_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_ORDERS_URL: http://order-service:8085
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  shipping-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: shipping-service
+    working_dir: /app
+    volumes:
+      - ./ShippingService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/envios_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_ORDERS_URL: http://order-service:8085
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  notification-service:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: notification-service
+    working_dir: /app
+    volumes:
+      - ./NotificationService:/app
+      - maven-cache:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificaciones_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_USERS_URL: http://user-service:8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  maven-cache:
