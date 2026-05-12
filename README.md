@@ -101,3 +101,13 @@ docker compose down
 La primera vez que se ejecuta, MySQL crea automáticamente las 11 bases de datos y Flyway aplica las migraciones en cada microservicio. Esperar aproximadamente 30-60 segundos hasta que todos los servicios estén listos.
 
 Cada microservicio expone su API en `http://localhost:{puerto}`. Los puertos se asignan incrementalmente desde el `8081` (AuthService) hasta el `8091` (NotificationService).
+
+### Acceso a MySQL
+
+El MySQL de Laragon usa el puerto `3306`. El MySQL de Docker se expone en el puerto `3307` para no interferir. Para conectarse a la base de datos de Docker desde HeidiSQL (portable de Laragon):
+
+- **Puerto:** `3307`
+- **Usuario:** `root`
+- **Contraseña:** `root`
+
+Así se pueden revisar las 11 bases de datos y sus tablas migradas por Flyway.
