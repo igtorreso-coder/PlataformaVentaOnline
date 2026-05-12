@@ -48,7 +48,7 @@ public class CarritoController {
     public ResponseEntity<CarritoResponseDTO> actualizarItem(
             @PathVariable Long id,
             @PathVariable Long itemId,
-            @RequestBody CarritoItemUpdateRequestDTO request) {
+            @Valid @RequestBody CarritoItemUpdateRequestDTO request) {
         CarritoResponseDTO response = carritoService.actualizarItem(id, itemId, request);
         return ResponseEntity.ok(response);
     }

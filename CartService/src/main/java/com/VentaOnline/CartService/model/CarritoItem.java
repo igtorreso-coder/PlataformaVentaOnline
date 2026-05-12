@@ -2,6 +2,7 @@ package com.VentaOnline.CartService.model;
 
 import java.math.BigDecimal;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class CarritoItem {
 
     @ManyToOne
     @JoinColumn(name = "carritoId", nullable = false)
+    @JsonIgnore
     private Carrito carrito;
 
     @Column(name = "producto_id", nullable = false)

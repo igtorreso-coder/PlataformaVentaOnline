@@ -3,6 +3,7 @@ package com.VentaOnline.AuthService.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.VentaOnline.AuthService.client.UserServiceClient;
 import com.VentaOnline.AuthService.dto.AuthUserResponseDTO;
@@ -26,6 +27,8 @@ public class AuthService {
     private TokenService tokenService;
     @Autowired
     private UserServiceClient userServiceClient;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public LoginResponseDTO registrar(RegistroRequestDTO request) {
         log.info("Registrando nuevo usuario: {}", request.getCorreo());
@@ -123,15 +126,11 @@ public class AuthService {
     }
 
     private String hashContrasena(String contrasena) {
-        StringBuilder hash = new StringBuilder();
-        for (int i = 0; i < contrasena.length(); i++) {
-            hash.append((int) contrasena.charAt(i) * 7 + 13).append("x");
-        }
-        return "HASH_" + hash.toString();
+        return passwordEncoder.encode(contrasena);
     }
 
     private boolean verificarContrasena(String raw, String hash) {
-        return hashContrasena(raw).equals(hash);
+        return passwordEncoder.matches(raw, hash);
     }
 
     private LoginResponseDTO toLoginResponse(AuthUser user, LoginToken token) {

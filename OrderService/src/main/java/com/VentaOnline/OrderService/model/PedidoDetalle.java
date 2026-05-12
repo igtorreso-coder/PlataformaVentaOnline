@@ -2,6 +2,7 @@ package com.VentaOnline.OrderService.model;
 
 import java.math.BigDecimal;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class PedidoDetalle {
 
     @ManyToOne
     @JoinColumn(name = "pedido_id", nullable = false)
+    @JsonIgnore
     private Pedido pedido;
 
     @Column(name = "producto_id", nullable = false)

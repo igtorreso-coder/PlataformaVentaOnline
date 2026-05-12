@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    // 422 UNPROCESSABLE_ENTITY - Error de validación de campos en la solicitud
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidation(MethodArgumentNotValidException ex, WebRequest request) {
         log.warn("Error de validación: {}", ex.getMessage());
@@ -35,7 +34,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.unprocessableEntity().body(response);
     }
 
-    // 400 BAD_REQUEST - Argumento inválido proporcionado
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiErrorResponse> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
         log.warn("Error de argumento: {}", ex.getMessage());
@@ -49,7 +47,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    // 404 NOT_FOUND - Recurso no encontrado
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiErrorResponse> handleNotFound(NoSuchElementException ex, WebRequest request) {
         log.warn("Recurso no encontrado: {}", ex.getMessage());
@@ -63,7 +60,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    // 409 CONFLICT - Violación de integridad de datos, en ocasion suele pasar por ejemplo cuando se intenta crear un usuario con un correo que ya existe, osea algo duplicado
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex, WebRequest request) {
         log.error("Error de integridad de datos: {}", ex.getMessage());
@@ -77,7 +73,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
-    // 500 INTERNAL_SERVER_ERROR - Error inesperado del servidor
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> handleRuntime(RuntimeException ex, WebRequest request) {
         log.error("Error inesperado: {}", ex.getMessage(), ex);

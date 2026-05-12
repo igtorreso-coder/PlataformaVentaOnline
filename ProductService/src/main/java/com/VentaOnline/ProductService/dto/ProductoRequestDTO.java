@@ -22,10 +22,6 @@ public class ProductoRequestDTO {
     private String nombre;
 
     private String descripcion;
-    /*
-     * Precio de venta del producto.
-     * @DecimalMin("0.01") asegura que sea un valor positivo.
-     */
     @NotNull(message = "El precio es obligatorio")
     @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
     private BigDecimal precio;
@@ -33,10 +29,6 @@ public class ProductoRequestDTO {
     @NotNull(message = "La categoría es obligatoria")
     private Long categoriaId;
 
-    /*
-     * Cantidad inicial de unidades disponibles en inventario.
-     * @Min(0) permite stock cero (producto agotado) pero no valores negativos.
-     */
     @NotNull(message = "El stock es obligatorio")
     @Min(value = 0, message = "El stock no puede ser negativo")
     private Integer stock;

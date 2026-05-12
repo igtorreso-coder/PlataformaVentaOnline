@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "carritos")
@@ -29,6 +30,7 @@ public class Carrito {
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
+    @ToString.Exclude
     private List<CarritoItem> items = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
