@@ -3,7 +3,6 @@ package com.VentaOnline.AuthService.client;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.VentaOnline.AuthService.dto.AuthUserResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Component

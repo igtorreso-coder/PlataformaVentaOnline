@@ -15,7 +15,6 @@ import com.VentaOnline.CartService.dto.CarritoRequestDTO;
 import com.VentaOnline.CartService.dto.CarritoResponseDTO;
 import com.VentaOnline.CartService.model.Carrito;
 import com.VentaOnline.CartService.model.CarritoItem;
-import com.VentaOnline.CartService.repository.CarritoItemRepository;
 import com.VentaOnline.CartService.repository.CarritoRepository;
 import lombok.AllArgsConstructor;
 
@@ -24,7 +23,6 @@ import lombok.AllArgsConstructor;
 public class CarritoService {
 
     private final CarritoRepository carritoRepository;
-    private final CarritoItemRepository carritoItemRepository;
     private final UsuarioClient usuarioClient;
     private final ProductoClient productoClient;
 
