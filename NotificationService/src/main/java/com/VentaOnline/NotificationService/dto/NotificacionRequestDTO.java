@@ -17,6 +17,10 @@ public class NotificacionRequestDTO {
     @NotNull(message = "El ID del usuario es obligatorio")
     private Long usuarioId;
 
+    /*
+     * Tipo de notificacion: "EMAIL", "SMS" o "PUSH".
+     * Se determinara el canal por el que se enviara el mensaje.
+     */
     @NotBlank(message = "El tipo es obligatorio")
     @Size(max = 20, message = "El tipo debe tener máximo 20 caracteres")
     private String tipo;

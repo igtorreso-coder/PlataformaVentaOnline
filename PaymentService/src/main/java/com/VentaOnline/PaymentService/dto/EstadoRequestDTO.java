@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstadoRequestDTO {
+    // Nuevo estado del pago "APROBADO", "RECHAZADO", "REEMBOLSADO")
     @NotBlank(message = "El estado es obligatorio")
     private String estado;
 }
