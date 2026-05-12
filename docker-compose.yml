@@ -3,7 +3,7 @@ services:
     image: mysql:8.0
     container_name: ecommerce-mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: auth_db
@@ -27,7 +27,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usuarios_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usuarios_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_CATEGORIES_URL: http://category-service:8082
@@ -47,7 +47,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/categorias_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/categorias_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_USERS_URL: http://user-service:8081
@@ -67,7 +67,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productos_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productos_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_CATEGORIES_URL: http://category-service:8082
@@ -87,7 +87,7 @@ services:
     ports:
       - "8084:8084"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/inventario_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/inventario_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_PRODUCTS_URL: http://product-service:8083
@@ -107,7 +107,7 @@ services:
     ports:
       - "8090:8090"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/auth_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/auth_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_USERS_URL: http://user-service:8081
@@ -127,7 +127,7 @@ services:
     ports:
       - "8088:8088"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/carritos_db?useSSL=false&serverTimezone=America/Mexico_City&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/carritos_db?useSSL=false&serverTimezone=America/Mexico_City&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true"
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       MICROSERVICIOS_USUARIOS_URL: http://user-service:8081
@@ -148,7 +148,7 @@ services:
     ports:
       - "8089:8089"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/descuentos_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/descuentos_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
@@ -167,7 +167,7 @@ services:
     ports:
       - "8085:8085"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pedidos_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pedidos_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_USERS_URL: http://user-service:8081
@@ -188,7 +188,7 @@ services:
     ports:
       - "8086:8086"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pagos_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pagos_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_ORDERS_URL: http://order-service:8085
@@ -208,7 +208,7 @@ services:
     ports:
       - "8087:8087"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/envios_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/envios_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_ORDERS_URL: http://order-service:8085
@@ -228,7 +228,7 @@ services:
     ports:
       - "8091:8091"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificaciones_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificaciones_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SERVICES_USERS_URL: http://user-service:8081
