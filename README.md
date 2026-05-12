@@ -91,7 +91,7 @@ docker compose up -d
 # 3. Verificar que los 11 servicios estén levantados
 docker compose ps
 
-# 4. Revisar logs de un servicio específico (ejemplo: OrderService)
+# 4. Revisar logs de un servicio específico
 docker compose logs -f order-service
 
 # 5. Detener todos los servicios
