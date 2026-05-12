@@ -71,3 +71,33 @@ El ecosistema E-commerce se compone de los siguientes 11 módulos independientes
   - Asume el control post-venta, encargándose de generar códigos de seguimiento y administrar los estados de despacho del paquete.
 - 11. `NotificationService` (Comunicaciones)
   - Servicio que registra los eventos importantes (como la confirmación de una compra) emitiendo alertas para simular la comunicación con el cliente.
+
+## Requisitos para Ejecutar
+
+- Docker y Docker Compose instalados
+- Puerto `3307` libre (MySQL de Docker)
+- Git para clonar el repositorio
+
+## Pasos para Ejecutar
+
+```bash
+# 1. Clonar el repositorio
+git clone <url-del-repositorio>
+cd PlataformaVentaOnline
+
+# 2. Iniciar todos los servicios con Docker Compose
+docker compose up -d
+
+# 3. Verificar que los 11 servicios estén levantados
+docker compose ps
+
+# 4. Revisar logs de un servicio específico (ejemplo: OrderService)
+docker compose logs -f order-service
+
+# 5. Detener todos los servicios
+docker compose down
+```
+
+La primera vez que se ejecuta, MySQL crea automáticamente las 11 bases de datos y Flyway aplica las migraciones en cada microservicio. Esperar aproximadamente 30-60 segundos hasta que todos los servicios estén listos.
+
+Cada microservicio expone su API en `http://localhost:{puerto}`. Los puertos se asignan incrementalmente desde el `8081` (AuthService) hasta el `8091` (NotificationService).
