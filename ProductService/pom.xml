@@ -11,8 +11,8 @@
 	<groupId>com.VentaOnline</groupId>
 	<artifactId>ProductService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>ProductService</name>
+	<description>Microservicio de Productos</description>
 	<url/>
 	<licenses>
 		<license/>

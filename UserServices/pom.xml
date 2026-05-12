@@ -11,8 +11,8 @@
 	<groupId>com.VentaOnline</groupId>
 	<artifactId>UserServices</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>UserServices</name>
+	<description>Microservicio de Usuarios</description>
 	<url/>
 	<licenses>
 		<license/>

@@ -11,8 +11,8 @@
 	<groupId>com.VentaOnline</groupId>
 	<artifactId>CategoryService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>CategoryService</name>
+	<description>Microservicio de Categorías</description>
 	<url/>
 	<licenses>
 		<license/>

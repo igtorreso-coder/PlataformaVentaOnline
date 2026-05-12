@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-    @Value("${services.products.url}")
+    @Value("${servicios.productos.url}")
     private String productsServiceUrl;
 
     @Bean

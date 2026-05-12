@@ -29,3 +29,6 @@ build/
 # Logs
 logs
 *.log
+
+# Compiled classes (Maven targets)
+**/target/

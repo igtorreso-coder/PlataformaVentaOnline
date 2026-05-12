@@ -14,8 +14,8 @@ independiente, asegurando que un alto volumen de ventas o despachos no afecte la
 
 El propósito central de este proyecto es demostrar la capacidad técnica para diseñar, construir y justificar una arquitectura distribuida basada en microservicios.
 
-Opte por este enfoque porque un E-commerce requiere manejar dominios de datos muy diferentes (un producto no tiene el mismo ciclo de vida que una factura o un envío). 
-Al separar la plataforma en 11 servicios independientes, se logro:
+Opté por este enfoque porque un E-commerce requiere manejar dominios de datos muy diferentes (un producto no tiene el mismo ciclo de vida que una factura o un envío). 
+Al separar la plataforma en 11 servicios independientes, se logró:
 
 Aislamiento de Bases de Datos: Cada servicio gestiona sus propios datos, garantizando integridad y evitando bloqueos (locks) masivos en una única base central.
 
@@ -28,7 +28,7 @@ Escalabilidad Horizontal: En fechas de alta demanda, se pueden levantar más ins
 Para cumplir con los más altos estándares de desarrollo, se aplicaron las siguientes tecnologías y metodologías:
 - Persistencia (`JPA` + `Hibernate`): Cada microservicio posee su propio esquema relacional (MySQL), configurado en su respectivo `application.properties`. Las operaciones CRUD se realizan mediante `JpaRepository`.
 - Migraciones (Flyway): En lugar de crear tablas manualmente, se integró `Flyway`. Al iniciar cada aplicación, `Flyway` ejecuta automáticamente los scripts SQL (V1__create...sql) asegurando que la base de datos siempre esté sincronizada con el código.
-- Validación (Bean Validation - JSR 380): Los datos entrantes nunca tocan la lógica de negocio directamente. Se utilizan `DTOs` (Data Transfer Objects) con anotaciones como `@NotNul`l o `@Positive` para garantizar que la información sea correcta y segura desde el controlador.
+- Validación (Bean Validation - JSR 380): Los datos entrantes nunca tocan la lógica de negocio directamente. Se utilizan `DTOs` (Data Transfer Objects) con anotaciones como `@NotNull`l o `@Positive` para garantizar que la información sea correcta y segura desde el controlador.
 - Manejo Centralizado de Excepciones: Se implementó `@ControllerAdvice (GlobalExceptionHandler)` en cada servicio. Esto captura errores de validación o fallas de lógica y retorna al cliente un JSON estructurado y estandarizado con códigos HTTP correctos `(400, 404, 409)`.
 - Patrón CSR (Controller-Service-Repository): El código sigue un flujo estricto y ordenado. El `Controller` recibe la petición REST, el `Service` ejecuta la regla de negocio y el `Repository` persiste el dato. Las responsabilidades no se mezclan.
 - Comunicación Síncrona: Los servicios se comunican entre sí para validar procesos. Por ejemplo, el `OrderService` consume los endpoints de `InventoryService` y `PaymentService` mediante clientes REST para asegurar la transacción completa.
@@ -100,7 +100,7 @@ docker compose down
 
 La primera vez que se ejecuta, MySQL crea automáticamente las 11 bases de datos y Flyway aplica las migraciones en cada microservicio. Esperar aproximadamente 30-60 segundos hasta que todos los servicios estén listos.
 
-Cada microservicio expone su API en `http://localhost:{puerto}`. Los puertos se asignan incrementalmente desde el `8081` (AuthService) hasta el `8091` (NotificationService).
+Cada microservicio expone su API en `http://localhost:{puerto}`. Los puertos se asignan incrementalmente desde el `8081` (UserServices) hasta el `8091` (NotificationService).
 
 ### Acceso a MySQL
 

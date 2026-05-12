@@ -30,7 +30,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usuarios_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_CATEGORIES_URL: http://category-service:8082
+      SERVICIOS_CATEGORIAS_URL: http://category-service:8082
     depends_on:
       mysql:
         condition: service_healthy
@@ -50,7 +50,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/categorias_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_USERS_URL: http://user-service:8081
+      SERVICIOS_USUARIOS_URL: http://user-service:8081
     depends_on:
       mysql:
         condition: service_healthy
@@ -70,7 +70,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productos_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_CATEGORIES_URL: http://category-service:8082
+      SERVICIOS_CATEGORIAS_URL: http://category-service:8082
     depends_on:
       mysql:
         condition: service_healthy
@@ -90,7 +90,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/inventario_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_PRODUCTS_URL: http://product-service:8083
+      SERVICIOS_PRODUCTOS_URL: http://product-service:8083
     depends_on:
       mysql:
         condition: service_healthy
@@ -110,7 +110,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/auth_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_USERS_URL: http://user-service:8081
+      SERVICIOS_USUARIOS_URL: http://user-service:8081
     depends_on:
       mysql:
         condition: service_healthy
@@ -130,8 +130,8 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/carritos_db?useSSL=false&serverTimezone=America/Mexico_City&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true"
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      MICROSERVICIOS_USUARIOS_URL: http://user-service:8081
-      MICROSERVICIOS_PRODUCTOS_URL: http://product-service:8083
+      SERVICIOS_USUARIOS_URL: http://user-service:8081
+      SERVICIOS_PRODUCTOS_URL: http://product-service:8083
     depends_on:
       mysql:
         condition: service_healthy
@@ -170,8 +170,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pedidos_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_USERS_URL: http://user-service:8081
-      SERVICES_PRODUCTS_URL: http://product-service:8083
+      SERVICIOS_USUARIOS_URL: http://user-service:8081
+      SERVICIOS_PRODUCTOS_URL: http://product-service:8083
     depends_on:
       mysql:
         condition: service_healthy
@@ -191,7 +191,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pagos_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_ORDERS_URL: http://order-service:8085
+      SERVICIOS_PEDIDOS_URL: http://order-service:8085
     depends_on:
       mysql:
         condition: service_healthy
@@ -211,7 +211,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/envios_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_ORDERS_URL: http://order-service:8085
+      SERVICIOS_PEDIDOS_URL: http://order-service:8085
     depends_on:
       mysql:
         condition: service_healthy
@@ -231,7 +231,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificaciones_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      SERVICES_USERS_URL: http://user-service:8081
+      SERVICIOS_USUARIOS_URL: http://user-service:8081
     depends_on:
       mysql:
         condition: service_healthy

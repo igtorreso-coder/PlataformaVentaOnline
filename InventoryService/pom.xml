@@ -11,8 +11,8 @@
 	<groupId>com.VentaOnline</groupId>
 	<artifactId>InventoryService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>InventoryService</name>
+	<description>Microservicio de Inventario</description>
 	<url/>
 	<licenses>
 		<license/>

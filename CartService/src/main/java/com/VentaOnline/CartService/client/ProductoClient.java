@@ -14,7 +14,7 @@ public class ProductoClient {
     @Autowired
     private WebClient webClient;
 
-    @Value("${microservicios.productos.url}")
+    @Value("${servicios.productos.url}")
     private String productosUrl;
 
     private WebClient productosWebClient;
