@@ -11,16 +11,14 @@ import com.VentaOnline.UserServices.dto.UsuarioResponseDTO;
 import com.VentaOnline.UserServices.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/usuarios")
 @Slf4j
 public class UsuarioController {
-    private final UsuarioService usuarioService;
-
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> obtenerUsuarios() {

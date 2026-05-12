@@ -11,16 +11,14 @@ import com.VentaOnline.CategoryService.dto.UsuarioDTO;
 import com.VentaOnline.CategoryService.service.CategoriaService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/categorias")
 @Slf4j
 public class CategoriaController {
-    private final CategoriaService categoriaService;
-
-    public CategoriaController(CategoriaService categoriaService) {
-        this.categoriaService = categoriaService;
-    }
+    @Autowired
+    private CategoriaService categoriaService;
 
     @GetMapping
     public ResponseEntity<List<CategoriaResponseDTO>> obtenerCategorias() {

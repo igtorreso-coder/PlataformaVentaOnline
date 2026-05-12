@@ -9,15 +9,15 @@ import com.VentaOnline.DiscountService.dto.CuponResponseDTO;
 import com.VentaOnline.DiscountService.dto.ValidarCuponResponse;
 import com.VentaOnline.DiscountService.model.Cupon;
 import com.VentaOnline.DiscountService.repository.CuponRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class CuponService {
 
-    private final CuponRepository cuponRepository;
+    @Autowired
+    private CuponRepository cuponRepository;
 
     public CuponResponseDTO crearCupon(CuponRequestDTO request) {
         log.info("Creando nuevo cupón: {}", request.getCodigo());

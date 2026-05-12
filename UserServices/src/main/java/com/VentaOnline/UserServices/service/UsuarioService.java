@@ -9,15 +9,16 @@ import com.VentaOnline.UserServices.dto.UsuarioRequestDTO;
 import com.VentaOnline.UserServices.dto.UsuarioResponseDTO;
 import com.VentaOnline.UserServices.model.Usuario;
 import com.VentaOnline.UserServices.repository.UsuarioRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class UsuarioService {
-    private final UsuarioRepository usuarioRepository;
-    private final CategoriaClient categoriaClient;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private CategoriaClient categoriaClient;
 
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO request) {
         log.info("Creando nuevo usuario con email: {}", request.getCorreo());

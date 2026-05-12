@@ -17,17 +17,20 @@ import com.VentaOnline.OrderService.model.Pedido;
 import com.VentaOnline.OrderService.model.PedidoDetalle;
 import com.VentaOnline.OrderService.repository.PedidoRepository;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class PedidoService {
-    private final PedidoRepository pedidoRepository;
-    private final PedidoMapper pedidoMapper;
-    private final UsuarioClient usuarioClient;
-    private final ProductoClient productoClient;
+    @Autowired
+    private PedidoRepository pedidoRepository;
+    @Autowired
+    private PedidoMapper pedidoMapper;
+    @Autowired
+    private UsuarioClient usuarioClient;
+    @Autowired
+    private ProductoClient productoClient;
 
     @Transactional
     public PedidoResponseDTO crearPedido(PedidoRequestDTO request) {

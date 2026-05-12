@@ -11,17 +11,15 @@ import com.VentaOnline.PaymentService.dto.PagoResponseDTO;
 import com.VentaOnline.PaymentService.service.PagoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/pagos")
 @Slf4j
 public class PagoController {
 
-    private final PagoService pagoService;
-
-    public PagoController(PagoService pagoService) {
-        this.pagoService = pagoService;
-    }
+    @Autowired
+    private PagoService pagoService;
 
     @GetMapping
     public ResponseEntity<List<PagoResponseDTO>> obtenerPagos() {

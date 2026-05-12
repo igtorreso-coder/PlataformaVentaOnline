@@ -11,16 +11,14 @@ import com.VentaOnline.OrderService.dto.PedidoResponseDTO;
 import com.VentaOnline.OrderService.service.PedidoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/pedidos")
 @Slf4j
 public class PedidoController {
-    private final PedidoService pedidoService;
-
-    public PedidoController(PedidoService pedidoService) {
-        this.pedidoService = pedidoService;
-    }
+    @Autowired
+    private PedidoService pedidoService;
 
     @GetMapping
     public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidos() {

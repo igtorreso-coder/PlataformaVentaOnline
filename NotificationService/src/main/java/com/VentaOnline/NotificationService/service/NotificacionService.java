@@ -9,16 +9,17 @@ import com.VentaOnline.NotificationService.dto.NotificacionRequestDTO;
 import com.VentaOnline.NotificationService.dto.NotificacionResponseDTO;
 import com.VentaOnline.NotificationService.model.Notificacion;
 import com.VentaOnline.NotificationService.repository.NotificacionRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class NotificacionService {
 
-    private final NotificacionRepository notificacionRepository;
-    private final UserServiceClient userServiceClient;
+    @Autowired
+    private NotificacionRepository notificacionRepository;
+    @Autowired
+    private UserServiceClient userServiceClient;
 
     public NotificacionResponseDTO crearNotificacion(NotificacionRequestDTO request) {
         log.info("Creando notificacion para usuario ID: {}, tipo: {}", request.getUsuarioId(), request.getTipo());

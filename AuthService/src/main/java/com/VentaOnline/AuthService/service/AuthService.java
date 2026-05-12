@@ -13,17 +13,19 @@ import com.VentaOnline.AuthService.dto.ValidarTokenResponseDTO;
 import com.VentaOnline.AuthService.model.AuthUser;
 import com.VentaOnline.AuthService.model.LoginToken;
 import com.VentaOnline.AuthService.repository.AuthUserRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class AuthService {
 
-    private final AuthUserRepository authUserRepository;
-    private final TokenService tokenService;
-    private final UserServiceClient userServiceClient;
+    @Autowired
+    private AuthUserRepository authUserRepository;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private UserServiceClient userServiceClient;
 
     public LoginResponseDTO registrar(RegistroRequestDTO request) {
         log.info("Registrando nuevo usuario: {}", request.getCorreo());

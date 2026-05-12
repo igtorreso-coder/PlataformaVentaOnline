@@ -2,6 +2,7 @@ package com.VentaOnline.UserServices.client;
 
 import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -11,11 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class CategoriaClient {
-    private final WebClient categoriesWebClient;
-
-    public CategoriaClient(WebClient categoriesWebClient) {
-        this.categoriesWebClient = categoriesWebClient;
-    }
+    @Autowired
+    private WebClient categoriesWebClient;
 
     public List<CategoriaDTO> getCategorias() {
         log.info("Obteniendo categorías desde categories-service");

@@ -9,15 +9,16 @@ import com.VentaOnline.InventoryService.dto.InventarioResponseDTO;
 import com.VentaOnline.InventoryService.dto.ProductoResponse;
 import com.VentaOnline.InventoryService.model.Inventario;
 import com.VentaOnline.InventoryService.repository.InventarioRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class InventarioService {
-    private final InventarioRepository inventarioRepository;
-    private final ProductoClient productoClient;
+    @Autowired
+    private InventarioRepository inventarioRepository;
+    @Autowired
+    private ProductoClient productoClient;
 
     public List<InventarioResponseDTO> obtenerTodosMovimientos() {
         log.info("Obteniendo todos los movimientos de inventario");

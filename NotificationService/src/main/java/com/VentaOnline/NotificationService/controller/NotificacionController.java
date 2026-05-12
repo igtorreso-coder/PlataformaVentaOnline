@@ -10,17 +10,15 @@ import com.VentaOnline.NotificationService.dto.NotificacionResponseDTO;
 import com.VentaOnline.NotificationService.service.NotificacionService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/notificaciones")
 @Slf4j
 public class NotificacionController {
 
-    private final NotificacionService notificacionService;
-
-    public NotificacionController(NotificacionService notificacionService) {
-        this.notificacionService = notificacionService;
-    }
+    @Autowired
+    private NotificacionService notificacionService;
 
     @GetMapping
     public ResponseEntity<List<NotificacionResponseDTO>> obtenerNotificaciones() {

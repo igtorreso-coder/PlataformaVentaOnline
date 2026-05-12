@@ -6,15 +6,15 @@ import org.springframework.stereotype.Service;
 import com.VentaOnline.AuthService.model.AuthUser;
 import com.VentaOnline.AuthService.model.LoginToken;
 import com.VentaOnline.AuthService.repository.LoginTokenRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class TokenService {
 
-    private final LoginTokenRepository loginTokenRepository;
+    @Autowired
+    private LoginTokenRepository loginTokenRepository;
 
     public LoginToken generarToken(AuthUser usuario) {
         String tokenStr = UUID.randomUUID().toString().replace("-", "") + System.currentTimeMillis();

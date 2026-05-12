@@ -1,5 +1,6 @@
 package com.VentaOnline.NotificationService.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -9,11 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserServiceClient {
 
-    private final WebClient usersWebClient;
-
-    public UserServiceClient(WebClient usersWebClient) {
-        this.usersWebClient = usersWebClient;
-    }
+    @Autowired
+    private WebClient usersWebClient;
 
     public void obtenerUsuario(Long usuarioId) {
         log.info("Verificando usuario ID: {}", usuarioId);

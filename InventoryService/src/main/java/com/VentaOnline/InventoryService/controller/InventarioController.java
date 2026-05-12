@@ -11,16 +11,14 @@ import com.VentaOnline.InventoryService.dto.ProductoResponse;
 import com.VentaOnline.InventoryService.service.InventarioService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/inventarios")
 @Slf4j
 public class InventarioController {
-    private final InventarioService inventarioService;
-
-    public InventarioController(InventarioService inventarioService) {
-        this.inventarioService = inventarioService;
-    }
+    @Autowired
+    private InventarioService inventarioService;
 
     @GetMapping
     public ResponseEntity<List<InventarioResponseDTO>> obtenerTodosMovimientos() {

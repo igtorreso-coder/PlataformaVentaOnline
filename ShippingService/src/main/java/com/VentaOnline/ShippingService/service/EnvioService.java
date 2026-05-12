@@ -11,16 +11,17 @@ import com.VentaOnline.ShippingService.dto.EnvioResponseDTO;
 import com.VentaOnline.ShippingService.dto.PedidoResponse;
 import com.VentaOnline.ShippingService.model.Envio;
 import com.VentaOnline.ShippingService.repository.EnvioRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class EnvioService {
 
-    private final EnvioRepository envioRepository;
-    private final PedidoClient pedidoClient;
+    @Autowired
+    private EnvioRepository envioRepository;
+    @Autowired
+    private PedidoClient pedidoClient;
 
     @Transactional
     public EnvioResponseDTO crearEnvio(EnvioRequestDTO request) {

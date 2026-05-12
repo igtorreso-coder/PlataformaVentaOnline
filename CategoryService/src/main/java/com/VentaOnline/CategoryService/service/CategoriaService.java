@@ -9,15 +9,16 @@ import com.VentaOnline.CategoryService.dto.CategoriaResponseDTO;
 import com.VentaOnline.CategoryService.dto.UsuarioDTO;
 import com.VentaOnline.CategoryService.model.Categoria;
 import com.VentaOnline.CategoryService.repository.CategoriaRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class CategoriaService {
-    private final CategoriaRepository categoriaRepository;
-    private final UserClient userClient;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+    @Autowired
+    private UserClient userClient;
 
     public CategoriaResponseDTO crearCategoria(CategoriaRequestDTO request) {
         log.info("Creando nueva categoría: {}", request.getNombre());

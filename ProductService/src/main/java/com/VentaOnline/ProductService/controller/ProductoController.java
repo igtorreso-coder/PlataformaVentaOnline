@@ -11,16 +11,14 @@ import com.VentaOnline.ProductService.dto.ProductoResponseDTO;
 import com.VentaOnline.ProductService.service.ProductoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/productos")
 @Slf4j
 public class ProductoController {
-    private final ProductoService productoService;
-
-    public ProductoController(ProductoService productoService) {
-        this.productoService = productoService;
-    }
+    @Autowired
+    private ProductoService productoService;
 
     @GetMapping
     public ResponseEntity<List<ProductoResponseDTO>> obtenerProductos() {

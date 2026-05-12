@@ -11,17 +11,15 @@ import com.VentaOnline.DiscountService.dto.ValidarCuponResponse;
 import com.VentaOnline.DiscountService.service.CuponService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/descuentos")
 @Slf4j
 public class CuponController {
 
-    private final CuponService cuponService;
-
-    public CuponController(CuponService cuponService) {
-        this.cuponService = cuponService;
-    }
+    @Autowired
+    private CuponService cuponService;
 
     @GetMapping
     public ResponseEntity<List<CuponResponseDTO>> obtenerCupones() {

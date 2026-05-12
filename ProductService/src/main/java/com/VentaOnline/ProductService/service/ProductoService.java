@@ -9,15 +9,16 @@ import com.VentaOnline.ProductService.dto.ProductoRequestDTO;
 import com.VentaOnline.ProductService.dto.ProductoResponseDTO;
 import com.VentaOnline.ProductService.model.Producto;
 import com.VentaOnline.ProductService.repository.ProductoRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class ProductoService {
-    private final ProductoRepository productoRepository;
-    private final CategoriaClient categoriaClient;
+    @Autowired
+    private ProductoRepository productoRepository;
+    @Autowired
+    private CategoriaClient categoriaClient;
 
     public List<ProductoResponseDTO> obtenerTodosProductos() {
         log.info("Obteniendo todos los productos");

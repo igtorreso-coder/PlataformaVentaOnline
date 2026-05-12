@@ -11,17 +11,15 @@ import com.VentaOnline.ShippingService.dto.EstadoRequestDTO;
 import com.VentaOnline.ShippingService.service.EnvioService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/envios")
 @Slf4j
 public class EnvioController {
 
-    private final EnvioService envioService;
-
-    public EnvioController(EnvioService envioService) {
-        this.envioService = envioService;
-    }
+    @Autowired
+    private EnvioService envioService;
 
     @GetMapping
     public ResponseEntity<List<EnvioResponseDTO>> obtenerEnvios() {

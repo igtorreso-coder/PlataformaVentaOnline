@@ -11,16 +11,17 @@ import com.VentaOnline.PaymentService.dto.PagoResponseDTO;
 import com.VentaOnline.PaymentService.dto.PedidoResponse;
 import com.VentaOnline.PaymentService.model.Pago;
 import com.VentaOnline.PaymentService.repository.PagoRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class PagoService {
 
-    private final PagoRepository pagoRepository;
-    private final PedidoClient pedidoClient;
+    @Autowired
+    private PagoRepository pagoRepository;
+    @Autowired
+    private PedidoClient pedidoClient;
 
     @Transactional
     public PagoResponseDTO crearPago(PagoRequestDTO request) {

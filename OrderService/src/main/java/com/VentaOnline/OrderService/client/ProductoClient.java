@@ -1,5 +1,6 @@
 package com.VentaOnline.OrderService.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -9,11 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class ProductoClient {
-    private final WebClient productsWebClient;
-
-    public ProductoClient(WebClient productsWebClient) {
-        this.productsWebClient = productsWebClient;
-    }
+    @Autowired
+    private WebClient productsWebClient;
 
     public ProductoResponse getProductoById(Long productoId) {
         log.info("Obteniendo producto con ID: {}", productoId);

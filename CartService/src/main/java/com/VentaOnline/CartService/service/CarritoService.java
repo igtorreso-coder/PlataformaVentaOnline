@@ -16,15 +16,17 @@ import com.VentaOnline.CartService.dto.CarritoResponseDTO;
 import com.VentaOnline.CartService.model.Carrito;
 import com.VentaOnline.CartService.model.CarritoItem;
 import com.VentaOnline.CartService.repository.CarritoRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
-@AllArgsConstructor
 public class CarritoService {
 
-    private final CarritoRepository carritoRepository;
-    private final UsuarioClient usuarioClient;
-    private final ProductoClient productoClient;
+    @Autowired
+    private CarritoRepository carritoRepository;
+    @Autowired
+    private UsuarioClient usuarioClient;
+    @Autowired
+    private ProductoClient productoClient;
 
     public CarritoResponseDTO crearCarrito(CarritoRequestDTO request) {
         usuarioClient.obtenerUsuario(request.getUsuarioId())

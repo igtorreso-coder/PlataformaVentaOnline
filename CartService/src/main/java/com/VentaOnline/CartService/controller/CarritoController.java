@@ -9,14 +9,14 @@ import com.VentaOnline.CartService.dto.CarritoItemUpdateRequestDTO;
 import com.VentaOnline.CartService.dto.CarritoRequestDTO;
 import com.VentaOnline.CartService.dto.CarritoResponseDTO;
 import com.VentaOnline.CartService.service.CarritoService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/carritos")
-@AllArgsConstructor
 public class CarritoController {
 
-    private final CarritoService carritoService;
+    @Autowired
+    private CarritoService carritoService;
 
     @PostMapping
     public ResponseEntity<CarritoResponseDTO> crearCarrito(@Valid @RequestBody CarritoRequestDTO request) {
