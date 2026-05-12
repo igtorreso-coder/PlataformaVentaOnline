@@ -14,8 +14,8 @@ independiente, asegurando que un alto volumen de ventas o despachos no afecte la
 
 El propósito central de este proyecto es demostrar la capacidad técnica para diseñar, construir y justificar una arquitectura distribuida basada en microservicios.
 
-Se optó por este enfoque porque un E-commerce requiere manejar dominios de datos muy diferentes (un producto no tiene el mismo ciclo de vida que una factura o un envío). 
-Al separar la plataforma en 11 servicios independientes, logramos:
+Opte por este enfoque porque un E-commerce requiere manejar dominios de datos muy diferentes (un producto no tiene el mismo ciclo de vida que una factura o un envío). 
+Al separar la plataforma en 11 servicios independientes, se logro:
 
 Aislamiento de Bases de Datos: Cada servicio gestiona sus propios datos, garantizando integridad y evitando bloqueos (locks) masivos en una única base central.
 
