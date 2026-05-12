@@ -23,6 +23,7 @@ public class RegistroRequestDTO {
     @Email(message = "El correo debe ser válido")
     private String correo;
 
+    // Contrasena en texto plano y con un minimo de tamaño para seguridad (se validara contra el hash almacenado)
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String contrasena;

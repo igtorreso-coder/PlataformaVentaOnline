@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RolRequestDTO {
+    // Nombre del rol a asignar ("ADMIN", "USER", "MODERATOR")
     @NotBlank(message = "El rol es obligatorio")
     private String rol;
 }
