@@ -51,7 +51,7 @@ public class Envio {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
         if (this.estado == null) {
-            this.estado = "PENDIENTE";
+            this.estado = "PENDIENTE"; // Estado inicial por defecto
         }
     }
 
