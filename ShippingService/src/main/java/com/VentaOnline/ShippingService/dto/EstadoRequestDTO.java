@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstadoRequestDTO {
+
+    // Nuevo estado del envio "EN_PREPARACION", "DESPACHADO", "EN_TRANSITO", "ENTREGADO")
     @NotBlank(message = "El estado es obligatorio")
     private String estado;
 }
