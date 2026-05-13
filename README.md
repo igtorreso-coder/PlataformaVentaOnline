@@ -111,3 +111,85 @@ El MySQL de Laragon usa el puerto `3306`. El MySQL de Docker se expone en el pue
 - **Contraseña:** `root`
 
 Así se pueden revisar las 11 bases de datos y sus tablas migradas por Flyway.
+
+## Puertos y Endpoints para Postman
+
+| Servicio | Puerto | Método | Endpoint | Descripción |
+|---|---|---|---|---|
+| **UserService** | 8081 | GET | `/api/usuarios` | Listar todos los usuarios |
+| | | GET | `/api/usuarios/{id}` | Obtener usuario por ID |
+| | | POST | `/api/usuarios` | Crear usuario |
+| | | PUT | `/api/usuarios/{id}` | Actualizar usuario |
+| | | DELETE | `/api/usuarios/{id}` | Eliminar usuario |
+| **CategoryService** | 8082 | GET | `/api/categorias` | Listar categorías |
+| | | GET | `/api/categorias/{id}` | Obtener categoría por ID |
+| | | POST | `/api/categorias` | Crear categoría |
+| | | PUT | `/api/categorias/{id}` | Actualizar categoría |
+| | | DELETE | `/api/categorias/{id}` | Eliminar categoría |
+| **ProductService** | 8083 | GET | `/api/productos` | Listar productos |
+| | | GET | `/api/productos/{id}` | Obtener producto por ID |
+| | | POST | `/api/productos` | Crear producto |
+| | | PUT | `/api/productos/{id}` | Actualizar producto |
+| | | DELETE | `/api/productos/{id}` | Eliminar producto |
+| **InventoryService** | 8084 | GET | `/api/inventarios` | Listar movimientos |
+| | | GET | `/api/inventarios/{id}` | Obtener movimiento |
+| | | POST | `/api/inventarios` | Crear movimiento (ENTRADA/SALIDA) |
+| | | GET | `/api/inventarios/stock/{productoId}` | Consultar stock de producto |
+| **OrderService** | 8085 | GET | `/api/pedidos` | Listar pedidos |
+| | | GET | `/api/pedidos/{id}` | Obtener pedido |
+| | | POST | `/api/pedidos` | Crear pedido |
+| | | PATCH | `/api/pedidos/{id}/estado` | Actualizar estado del pedido |
+| **PaymentService** | 8086 | GET | `/api/pagos` | Listar pagos |
+| | | GET | `/api/pagos/{id}` | Obtener pago |
+| | | POST | `/api/pagos` | Crear pago |
+| | | POST | `/api/pagos/{id}/procesar` | Procesar pago |
+| **ShippingService** | 8087 | GET | `/api/envios` | Listar envíos |
+| | | GET | `/api/envios/{id}` | Obtener envío |
+| | | POST | `/api/envios` | Crear envío |
+| | | POST | `/api/envios/{id}/enviar` | Marcar como enviado |
+| **CartService** | 8088 | POST | `/api/carritos` | Crear carrito |
+| | | GET | `/api/carritos/{id}` | Obtener carrito |
+| | | POST | `/api/carritos/{id}/items` | Agregar item al carrito |
+| | | POST | `/api/carritos/{id}/checkout` | Finalizar compra |
+| **DiscountService** | 8089 | GET | `/api/descuentos` | Listar cupones |
+| | | GET | `/api/descuentos/{id}` | Obtener cupón |
+| | | GET | `/api/descuentos/codigo/{codigo}` | Buscar cupón por código |
+| | | POST | `/api/descuentos` | Crear cupón |
+| | | POST | `/api/descuentos/{id}/validar` | Validar cupón |
+| | | POST | `/api/descuentos/{id}/usar` | Usar cupón |
+| **AuthService** | 8090 | POST | `/api/auth/registro` | Registrar usuario |
+| | | POST | `/api/auth/login` | Iniciar sesión |
+| | | GET | `/api/auth/validar?token=` | Validar token |
+| | | GET | `/api/auth/usuarios` | Listar usuarios auth |
+| | | GET | `/api/auth/usuarios/{id}` | Obtener usuario auth |
+| **NotificationService** | 8091 | GET | `/api/notificaciones` | Listar notificaciones |
+| | | GET | `/api/notificaciones/{id}` | Obtener notificación |
+| | | POST | `/api/notificaciones` | Crear notificación |
+| | | POST | `/api/notificaciones/{id}/enviar` | Enviar notificación |
+
+### Datos de prueba disponibles
+
+Los siguientes datos se crean automáticamente al iniciar los servicios (vía Flyway):
+
+| Servicio | Registros |
+|---|---|
+| UserService | 3 usuarios: Ignacio Torres, Maria Garcia, Juan Perez |
+| AuthService | 3 cuentas con contraseña `123456` |
+| CategoryService | 5 categorías: Electrónica, Ropa, Hogar, Deportes, Libros |
+| ProductService | 8 productos con precios desde $350 hasta $25,000 |
+| InventoryService | 8 movimientos de entrada (stock inicial) |
+| CartService | 2 carritos activos con items |
+| DiscountService | 4 cupones: BIENVENIDO, VERANO2025, ENVIOGRATIS, VIP10 |
+| OrderService | 2 pedidos (1 confirmado, 1 pendiente) |
+| PaymentService | 2 pagos (1 aprobado, 1 pendiente) |
+| ShippingService | 1 envío en tránsito |
+| NotificationService | 2 notificaciones |
+
+### Credenciales de prueba
+
+| Correo | Contraseña | Rol |
+|---|---|---|
+| `ignacio@email.com` | `123456` | ADMIN |
+| `maria@email.com` | `123456` | USER |
+| `juan@email.com` | `123456` | USER |
+
