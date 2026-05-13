@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class) // Maneja errores de validación de argumentos, como campos faltantes o formatos incorrectos en las solicitudes
     public ResponseEntity<ApiErrorResponse> handleValidation(MethodArgumentNotValidException ex, WebRequest request) {
         log.warn("Error de validación: {}", ex.getMessage());
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.unprocessableEntity().body(response);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(IllegalArgumentException.class) // Maneja argumentos ilegales, como estados no válidos
     public ResponseEntity<ApiErrorResponse> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
         log.warn("Error de argumento: {}", ex.getMessage());
         ApiErrorResponse response = ApiErrorResponse.builder()
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(NoSuchElementException.class) // Maneja casos donde no se encuentra un recurso, como un envío o pedido inexistente
     public ResponseEntity<ApiErrorResponse> handleNotFound(NoSuchElementException ex, WebRequest request) {
         log.warn("Recurso no encontrado: {}", ex.getMessage());
         ApiErrorResponse response = ApiErrorResponse.builder()
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler(DataIntegrityViolationException.class) // Maneja violaciones de integridad de datos, como claves foráneas no válidas o duplicados
     public ResponseEntity<ApiErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex, WebRequest request) {
         log.error("Error de integridad de datos: {}", ex.getMessage());
         ApiErrorResponse response = ApiErrorResponse.builder()
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class) // Captura cualquier otro error no manejado específicamente
     public ResponseEntity<ApiErrorResponse> handleRuntime(RuntimeException ex, WebRequest request) {
         log.error("Error inesperado: {}", ex.getMessage(), ex);
         ApiErrorResponse response = ApiErrorResponse.builder()
