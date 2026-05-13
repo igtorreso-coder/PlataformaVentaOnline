@@ -82,7 +82,7 @@ El ecosistema E-commerce se compone de los siguientes 11 módulos independientes
 
 ```bash
 # 1. Clonar el repositorio
-git clone <url-del-repositorio>
+git clone https://github.com/igtorreso-coder/PlataformaVentaOnline.git
 cd PlataformaVentaOnline
 
 # 2. Iniciar todos los servicios con Docker Compose
