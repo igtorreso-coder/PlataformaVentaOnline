@@ -31,8 +31,7 @@ public class CarritoService {
 
     @Transactional
     public CarritoResponseDTO crearCarrito(CarritoRequestDTO request) {
-        usuarioClient.obtenerUsuario(request.getUsuarioId())
-                .block();
+        usuarioClient.obtenerUsuario(request.getUsuarioId());
 
         Carrito carrito = Carrito.builder()
                 .usuarioId(request.getUsuarioId())
@@ -63,8 +62,7 @@ public class CarritoService {
             throw new IllegalArgumentException("El carrito no está activo");
         }
 
-        var productoResponse = productoClient.obtenerProducto(request.getProductoId())
-                .block();
+        var productoResponse = productoClient.obtenerProducto(request.getProductoId());
 
         if (productoResponse == null) {
             throw new IllegalArgumentException("Producto no encontrado con ID: " + request.getProductoId());
@@ -148,7 +146,7 @@ public class CarritoService {
                 .map(item -> {
                     String nombreProducto = "Producto #" + item.getProductoId();
                     try {
-                        var prod = productoClient.obtenerProducto(item.getProductoId()).block();
+                        var prod = productoClient.obtenerProducto(item.getProductoId());
                         if (prod != null) {
                             nombreProducto = prod.getNombre();
                         }

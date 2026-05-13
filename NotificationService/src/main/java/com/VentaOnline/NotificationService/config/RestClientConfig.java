@@ -1,19 +1,20 @@
-package com.VentaOnline.UserServices.config;
+package com.VentaOnline.NotificationService.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 
 @Configuration
-public class WebClientConfig {
-    @Value("${servicios.categorias.url}")
-    private String categoriesServiceUrl;
+public class RestClientConfig {
+
+    @Value("${servicios.usuarios.url}")
+    private String usersServiceUrl;
 
     @Bean
-    public WebClient categoriesWebClient() {
-        return WebClient.builder()
-                .baseUrl(categoriesServiceUrl)
+    public RestClient usersRestClient() {
+        return RestClient.builder()
+                .baseUrl(usersServiceUrl)
                 .defaultHeader("Content-Type", "application/json")
                 .defaultHeader("Accept", "application/json")
                 .build();

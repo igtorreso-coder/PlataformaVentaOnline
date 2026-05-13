@@ -10,7 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.client.HttpStatusCodeException;
 import com.VentaOnline.CartService.dto.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -74,8 +74,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
-    @ExceptionHandler(WebClientResponseException.class)
-    public ResponseEntity<ApiErrorResponse> handleWebClient(WebClientResponseException ex, WebRequest request) {
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public ResponseEntity<ApiErrorResponse> handleHttpError(HttpStatusCodeException ex, WebRequest request) {
         log.error("Error al comunicarse con microservicio: {}", ex.getMessage());
         ApiErrorResponse response = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())

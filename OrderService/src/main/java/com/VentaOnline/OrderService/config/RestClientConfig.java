@@ -3,10 +3,10 @@ package com.VentaOnline.OrderService.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 
 @Configuration
-public class WebClientConfig {
+public class RestClientConfig {
     @Value("${servicios.usuarios.url}")
     private String usersServiceUrl;
 
@@ -14,8 +14,8 @@ public class WebClientConfig {
     private String productsServiceUrl;
 
     @Bean
-    public WebClient usersWebClient() {
-        return WebClient.builder()
+    public RestClient usersRestClient() {
+        return RestClient.builder()
                 .baseUrl(usersServiceUrl)
                 .defaultHeader("Content-Type", "application/json")
                 .defaultHeader("Accept", "application/json")
@@ -23,8 +23,8 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient productsWebClient() {
-        return WebClient.builder()
+    public RestClient productsRestClient() {
+        return RestClient.builder()
                 .baseUrl(productsServiceUrl)
                 .defaultHeader("Content-Type", "application/json")
                 .defaultHeader("Accept", "application/json")

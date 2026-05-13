@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.HttpClientErrorException;
 import com.VentaOnline.UserServices.dto.CategoriaDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,19 +13,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CategoriaClient {
     @Autowired
-    private WebClient categoriesWebClient;
+    private RestClient categoriesRestClient;
 
     public List<CategoriaDTO> getCategorias() {
-        log.info("Obteniendo categorías desde categories-service");
+        log.info("Obteniendo categorias desde categories-service");
         try {
-            return categoriesWebClient.get()
+            return categoriesRestClient.get()
                     .uri("/api/categorias")
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<List<CategoriaDTO>>() {})
-                    .block();
-        } catch (WebClientResponseException ex) {
-            log.error("Error al obtener categorías: {}", ex.getMessage());
-            throw new RuntimeException("Error al obtener categorías del microservicio", ex);
+                    .body(new ParameterizedTypeReference<List<CategoriaDTO>>() {});
+        } catch (HttpClientErrorException ex) {
+            log.error("Error al obtener categorias: {}", ex.getMessage());
+            throw new RuntimeException("Error al obtener categorias del microservicio", ex);
         }
     }
 }

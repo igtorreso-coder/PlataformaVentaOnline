@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.HttpClientErrorException;
 import com.VentaOnline.InventoryService.dto.ProductoResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,17 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductoClient {
     @Autowired
-    private WebClient productsWebClient;
+    private RestClient productsRestClient;
 
     public ProductoResponse getProductoById(Long productoId) {
         log.info("Obteniendo producto con ID: {}", productoId);
         try {
-            return productsWebClient.get()
+            return productsRestClient.get()
                     .uri("/api/productos/{productoId}", productoId)
                     .retrieve()
-                    .bodyToMono(ProductoResponse.class)
-                    .block();
-        } catch (WebClientResponseException ex) {
+                    .body(ProductoResponse.class);
+        } catch (HttpClientErrorException ex) {
             log.error("Error al obtener producto con ID {}: {}", productoId, ex.getMessage());
             switch (ex.getStatusCode().value()) {
                 case 404 -> throw new RuntimeException("Producto no encontrado con ID: " + productoId);
@@ -35,12 +34,11 @@ public class ProductoClient {
     public List<ProductoResponse> getProductos() {
         log.info("Obteniendo todos los productos");
         try {
-            return productsWebClient.get()
+            return productsRestClient.get()
                     .uri("/api/productos")
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<List<ProductoResponse>>() {})
-                    .block();
-        } catch (WebClientResponseException ex) {
+                    .body(new ParameterizedTypeReference<List<ProductoResponse>>() {});
+        } catch (HttpClientErrorException ex) {
             log.error("Error al obtener productos: {}", ex.getMessage());
             throw new RuntimeException("Error al obtener productos del microservicio", ex);
         }

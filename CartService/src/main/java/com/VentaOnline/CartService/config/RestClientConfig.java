@@ -1,15 +1,15 @@
-package com.VentaOnline.DiscountService.config;
+package com.VentaOnline.CartService.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 
 @Configuration
-public class WebClientConfig {
+public class RestClientConfig {
 
     @Bean
-    public WebClient ordersWebClient() {
-        return WebClient.builder()
+    public RestClient restClient() {
+        return RestClient.builder()
                 .defaultHeader("Content-Type", "application/json")
                 .defaultHeader("Accept", "application/json")
                 .build();
