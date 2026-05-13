@@ -20,8 +20,7 @@ public class UserServiceClient {
                     .uri("/api/usuarios")
                     .bodyValue(Map.of(
                             "nombre", nombre,
-                            "correo", correo,
-                            "contrasena", "auth-managed-" + id
+                            "correo", correo
                     ))
                     .retrieve()
                     .bodyToMono(Void.class)

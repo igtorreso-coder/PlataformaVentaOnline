@@ -30,7 +30,6 @@ public class UsuarioService {
         Usuario usuario = Usuario.builder()
                 .nombreCompleto(request.getNombre())
                 .correo(request.getCorreo())
-                .contrasena(request.getContrasena())
                 .build();
         usuario = usuarioRepository.save(usuario);
         return toResponse(usuario);
@@ -61,7 +60,6 @@ public class UsuarioService {
         }
         existing.setNombreCompleto(request.getNombre());
         existing.setCorreo(request.getCorreo());
-        existing.setContrasena(request.getContrasena());
         return toResponse(usuarioRepository.save(existing));
     }
 

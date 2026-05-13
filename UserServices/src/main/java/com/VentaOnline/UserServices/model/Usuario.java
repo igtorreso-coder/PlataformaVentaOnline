@@ -24,9 +24,6 @@ public class Usuario {
     @Column(nullable = false, length = 100, unique = true)
     private String correo;
 
-    @Column(nullable = false, length = 255)
-    private String contrasena;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
