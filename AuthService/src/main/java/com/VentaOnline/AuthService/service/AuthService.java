@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.AuthService.client.UserServiceClient;
 import com.VentaOnline.AuthService.dto.AuthUserResponseDTO;
 import com.VentaOnline.AuthService.dto.LoginRequestDTO;
@@ -30,6 +31,7 @@ public class AuthService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Transactional
     public LoginResponseDTO registrar(RegistroRequestDTO request) {
         log.info("Registrando nuevo usuario: {}", request.getCorreo());
         if (authUserRepository.existsByCorreo(request.getCorreo())) {
@@ -53,6 +55,7 @@ public class AuthService {
         return toLoginResponse(user, token);
     }
 
+    @Transactional
     public LoginResponseDTO login(LoginRequestDTO request) {
         log.info("Intento de login: {}", request.getCorreo());
         AuthUser user = authUserRepository.findByCorreo(request.getCorreo())
@@ -106,6 +109,7 @@ public class AuthService {
                 .orElseThrow(() -> new NoSuchElementException("Usuario auth no encontrado con ID: " + id));
     }
 
+    @Transactional
     public AuthUserResponseDTO actualizarRol(Long id, String nuevoRol) {
         log.info("Actualizando rol del usuario ID: {} a {}", id, nuevoRol);
         if (!List.of("USER", "ADMIN").contains(nuevoRol.toUpperCase())) {
@@ -117,6 +121,7 @@ public class AuthService {
         return toResponse(authUserRepository.save(user));
     }
 
+    @Transactional
     public AuthUserResponseDTO cambiarEstado(Long id) {
         log.info("Cambiando estado del usuario ID: {}", id);
         AuthUser user = authUserRepository.findById(id)

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.VentaOnline.CartService.client.ProductoClient;
 import com.VentaOnline.CartService.client.UsuarioClient;
@@ -28,6 +29,7 @@ public class CarritoService {
     @Autowired
     private ProductoClient productoClient;
 
+    @Transactional
     public CarritoResponseDTO crearCarrito(CarritoRequestDTO request) {
         usuarioClient.obtenerUsuario(request.getUsuarioId())
                 .block();
@@ -52,6 +54,7 @@ public class CarritoService {
         return toResponse(carrito);
     }
 
+    @Transactional
     public CarritoResponseDTO agregarItem(Long carritoId, CarritoItemRequestDTO request) {
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
@@ -84,6 +87,7 @@ public class CarritoService {
         return toResponse(carrito);
     }
 
+    @Transactional
     public CarritoResponseDTO actualizarItem(Long carritoId, Long itemId, CarritoItemUpdateRequestDTO request) {
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
@@ -101,6 +105,7 @@ public class CarritoService {
         return toResponse(carrito);
     }
 
+    @Transactional
     public CarritoResponseDTO eliminarItem(Long carritoId, Long itemId) {
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
@@ -116,12 +121,14 @@ public class CarritoService {
         return toResponse(carrito);
     }
 
+    @Transactional
     public void eliminarCarrito(Long id) {
         Carrito carrito = carritoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));
         carritoRepository.delete(carrito);
     }
 
+    @Transactional
     public CarritoResponseDTO finalizarCarrito(Long id) {
         Carrito carrito = carritoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));

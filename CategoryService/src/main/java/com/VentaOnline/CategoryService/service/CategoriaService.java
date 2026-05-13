@@ -3,6 +3,7 @@ package com.VentaOnline.CategoryService.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.CategoryService.client.UserClient;
 import com.VentaOnline.CategoryService.dto.CategoriaRequestDTO;
 import com.VentaOnline.CategoryService.dto.CategoriaResponseDTO;
@@ -20,6 +21,7 @@ public class CategoriaService {
     @Autowired
     private UserClient userClient;
 
+    @Transactional
     public CategoriaResponseDTO crearCategoria(CategoriaRequestDTO request) {
         log.info("Creando nueva categoría: {}", request.getNombre());
         if (categoriaRepository.existsByNombre(request.getNombre())) {
@@ -47,6 +49,7 @@ public class CategoriaService {
                 .orElseThrow(() -> new NoSuchElementException("Categoría no encontrada con ID: " + id));
     }
 
+    @Transactional
     public CategoriaResponseDTO actualizarCategoria(Long id, CategoriaRequestDTO request) {
         log.info("Actualizando categoría con ID: {}", id);
         Categoria existing = categoriaRepository.findById(id)
@@ -60,6 +63,7 @@ public class CategoriaService {
         return toResponse(categoriaRepository.save(existing));
     }
 
+    @Transactional
     public void eliminarCategoria(Long id) {
         log.info("Eliminando categoría con ID: {}", id);
         if (!categoriaRepository.existsById(id)) {

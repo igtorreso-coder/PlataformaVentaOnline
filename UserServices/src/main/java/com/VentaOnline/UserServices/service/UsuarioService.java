@@ -3,6 +3,7 @@ package com.VentaOnline.UserServices.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.UserServices.client.CategoriaClient;
 import com.VentaOnline.UserServices.dto.CategoriaDTO;
 import com.VentaOnline.UserServices.dto.UsuarioRequestDTO;
@@ -20,6 +21,7 @@ public class UsuarioService {
     @Autowired
     private CategoriaClient categoriaClient;
 
+    @Transactional
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO request) {
         log.info("Creando nuevo usuario con email: {}", request.getCorreo());
         if (usuarioRepository.existsByCorreo(request.getCorreo())) {
@@ -48,6 +50,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado con ID: " + id));
     }
 
+    @Transactional
     public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO request) {
         log.info("Actualizando usuario con ID: {}", id);
         Usuario existing = usuarioRepository.findById(id)
@@ -62,6 +65,7 @@ public class UsuarioService {
         return toResponse(usuarioRepository.save(existing));
     }
 
+    @Transactional
     public void eliminarUsuario(Long id) {
         log.info("Eliminando usuario con ID: {}", id);
         if (!usuarioRepository.existsById(id)) {

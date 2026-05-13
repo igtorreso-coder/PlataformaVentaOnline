@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.DiscountService.dto.CuponRequestDTO;
 import com.VentaOnline.DiscountService.dto.CuponResponseDTO;
 import com.VentaOnline.DiscountService.dto.ValidarCuponResponse;
@@ -19,6 +20,7 @@ public class CuponService {
     @Autowired
     private CuponRepository cuponRepository;
 
+    @Transactional
     public CuponResponseDTO crearCupon(CuponRequestDTO request) {
         log.info("Creando nuevo cupón: {}", request.getCodigo());
         if (cuponRepository.existsByCodigo(request.getCodigo())) {
@@ -62,6 +64,7 @@ public class CuponService {
                 .orElseThrow(() -> new NoSuchElementException("Cupón no encontrado con código: " + codigo));
     }
 
+    @Transactional
     public CuponResponseDTO actualizarCupon(Long id, CuponRequestDTO request) {
         log.info("Actualizando cupón con ID: {}", id);
         Cupon existing = cuponRepository.findById(id)
@@ -84,6 +87,7 @@ public class CuponService {
         return toResponse(cuponRepository.save(existing));
     }
 
+    @Transactional
     public void eliminarCupon(Long id) {
         log.info("Eliminando cupón con ID: {}", id);
         if (!cuponRepository.existsById(id)) {
@@ -128,6 +132,7 @@ public class CuponService {
                 .build();
     }
 
+    @Transactional
     public CuponResponseDTO usarCupon(Long id) {
         log.info("Usando cupón con ID: {}", id);
         Cupon cupon = cuponRepository.findById(id)

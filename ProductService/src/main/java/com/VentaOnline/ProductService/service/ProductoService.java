@@ -3,6 +3,7 @@ package com.VentaOnline.ProductService.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.ProductService.client.CategoriaClient;
 import com.VentaOnline.ProductService.dto.CategoriaResponse;
 import com.VentaOnline.ProductService.dto.ProductoRequestDTO;
@@ -41,6 +42,7 @@ public class ProductoService {
                 .toList();
     }
 
+    @Transactional
     public ProductoResponseDTO crearProducto(ProductoRequestDTO request) {
         log.info("Creando nuevo producto: {}", request.getNombre());
         CategoriaResponse categoria = categoriaClient.getCategoriaById(request.getCategoriaId());
@@ -55,6 +57,7 @@ public class ProductoService {
         return toResponse(producto, categoria.getNombre());
     }
 
+    @Transactional
     public ProductoResponseDTO actualizarProducto(Long id, ProductoRequestDTO request) {
         log.info("Actualizando producto con ID: {}", id);
         Producto existing = productoRepository.findById(id)
@@ -68,6 +71,7 @@ public class ProductoService {
         return toResponse(productoRepository.save(existing), categoria.getNombre());
     }
 
+    @Transactional
     public void eliminarProducto(Long id) {
         log.info("Eliminando producto con ID: {}", id);
         if (!productoRepository.existsById(id)) {

@@ -3,6 +3,7 @@ package com.VentaOnline.AuthService.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.AuthService.model.AuthUser;
 import com.VentaOnline.AuthService.model.LoginToken;
 import com.VentaOnline.AuthService.repository.LoginTokenRepository;
@@ -16,6 +17,7 @@ public class TokenService {
     @Autowired
     private LoginTokenRepository loginTokenRepository;
 
+    @Transactional
     public LoginToken generarToken(AuthUser usuario) {
         String tokenStr = UUID.randomUUID().toString().replace("-", "") + System.currentTimeMillis();
         LoginToken loginToken = LoginToken.builder()
@@ -35,6 +37,7 @@ public class TokenService {
                 .orElse(null);
     }
 
+    @Transactional
     public void invalidarToken(String tokenStr) {
         loginTokenRepository.findByTokenAndActivoTrue(tokenStr).ifPresent(token -> {
             token.setActivo(false);

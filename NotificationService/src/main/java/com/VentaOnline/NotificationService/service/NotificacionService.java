@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.NotificationService.client.UserServiceClient;
 import com.VentaOnline.NotificationService.dto.NotificacionRequestDTO;
 import com.VentaOnline.NotificationService.dto.NotificacionResponseDTO;
@@ -21,6 +22,7 @@ public class NotificacionService {
     @Autowired
     private UserServiceClient userServiceClient;
 
+    @Transactional
     public NotificacionResponseDTO crearNotificacion(NotificacionRequestDTO request) {
         log.info("Creando notificacion para usuario ID: {}, tipo: {}", request.getUsuarioId(), request.getTipo());
 
@@ -64,6 +66,7 @@ public class NotificacionService {
                 .toList();
     }
 
+    @Transactional
     public NotificacionResponseDTO enviarNotificacion(Long id) {
         log.info("Enviando notificacion con ID: {}", id);
         Notificacion notificacion = notificacionRepository.findById(id)
@@ -87,6 +90,7 @@ public class NotificacionService {
         return toResponse(notificacion);
     }
 
+    @Transactional
     public void eliminarNotificacion(Long id) {
         log.info("Eliminando notificacion con ID: {}", id);
         if (!notificacionRepository.existsById(id)) {

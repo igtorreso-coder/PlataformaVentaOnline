@@ -3,6 +3,7 @@ package com.VentaOnline.InventoryService.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.VentaOnline.InventoryService.client.ProductoClient;
 import com.VentaOnline.InventoryService.dto.InventarioRequestDTO;
 import com.VentaOnline.InventoryService.dto.InventarioResponseDTO;
@@ -41,6 +42,7 @@ public class InventarioService {
                 .toList();
     }
 
+    @Transactional
     public InventarioResponseDTO crearMovimiento(InventarioRequestDTO request) {
         log.info("Registrando movimiento de inventario - producto: {}, tipo: {}, cantidad: {}",
                 request.getProductoId(), request.getTipo(), request.getCantidad());
