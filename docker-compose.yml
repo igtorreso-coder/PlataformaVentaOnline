@@ -226,7 +226,7 @@ services:
       - maven-cache:/root/.m2
     command: mvn spring-boot:run
     ports:
-      - "8091:8091"
+      - "8191:8091"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificaciones_db?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
