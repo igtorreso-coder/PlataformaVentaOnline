@@ -28,21 +28,21 @@ Escalabilidad Horizontal: En fechas de alta demanda, se pueden levantar más ins
 Para cumplir con los más altos estándares de desarrollo, se aplicaron las siguientes tecnologías y metodologías:
 - Persistencia (`JPA` + `Hibernate`): Cada microservicio posee su propio esquema relacional (MySQL), configurado en su respectivo `application.properties`. Las operaciones CRUD se realizan mediante `JpaRepository`.
 - Migraciones (Flyway): En lugar de crear tablas manualmente, se integró `Flyway`. Al iniciar cada aplicación, `Flyway` ejecuta automáticamente los scripts SQL (V1__create...sql) asegurando que la base de datos siempre esté sincronizada con el código.
-- Validación (Bean Validation - JSR 380): Los datos entrantes nunca tocan la lógica de negocio directamente. Se utilizan `DTOs` (Data Transfer Objects) con anotaciones como `@NotNull`l o `@Positive` para garantizar que la información sea correcta y segura desde el controlador.
+- Validación (Bean Validation - JSR 380): Los datos entrantes nunca tocan la lógica de negocio directamente. Se utilizan `DTOs` con anotaciones como `@NotNull` o `@Positive` para garantizar que la información sea correcta y segura desde el controlador.
 - Manejo Centralizado de Excepciones: Se implementó `@ControllerAdvice (GlobalExceptionHandler)` en cada servicio. Esto captura errores de validación o fallas de lógica y retorna al cliente un JSON estructurado y estandarizado con códigos HTTP correctos `(400, 404, 409)`.
-- Patrón CSR (Controller-Service-Repository): El código sigue un flujo estricto y ordenado. El `Controller` recibe la petición REST, el `Service` ejecuta la regla de negocio y el `Repository` persiste el dato. Las responsabilidades no se mezclan.
-- Comunicación Síncrona: Los servicios se comunican entre sí para validar procesos. Por ejemplo, el `OrderService` consume los endpoints de `InventoryService` y `PaymentService` mediante clientes REST para asegurar la transacción completa.
+- Patrón CSR: El código sigue un flujo estricto y ordenado. El `Controller` recibe la petición REST, el `Service` ejecuta la regla de negocio y el `Repository` persiste el dato. Las responsabilidades no se mezclan.
+- Comunicación Síncrona con `RestClient`: Los servicios se comunican entre sí mediante `RestClient`, usado como reemplazo de `WebClient` por su menor complejidad de aprendizaje y su implementación más artesanal y fácil de aplicar.
 - Trazabilidad (SLF4J): Se registraron logs estructurados en las capas de servicio, permitiendo auditar el flujo de cada transacción, errores críticos y comunicaciones externas.
 
 ## Flujo de Negocio
 Para entender la integración de los microservicios, este es el viaje de un pedido en la plataforma:
-- El usuario se autentica `(AuthService)` y navega por el catálogo, filtrando artículos `(ProductService` y `CategoryService)`.
-- El cliente añade productos a su sesión temporal `(CartService)`.
-- Al proceder al pago, el carrito se envía al orquestador principal `(OrderService)`.
+- El usuario se autentica (`AuthService`) y navega por el catálogo, filtrando artículos (`ProductService` y `CategoryService`).
+- El cliente añade productos a su sesión temporal (`CartService`).
+- Al proceder al pago, el carrito se envía al orquestador principal (`OrderService`).
 - OrderService realiza tres acciones vitales:
 - Valida y descuenta físicamente el stock en el `InventoryService`.
 - Si se ingresó un cupón, calcula el nuevo monto en el `DiscountService`.
-- Envía el monto final a la pasarela simulada `(PaymentService)`.
+- Envía el monto final a la pasarela simulada (`PaymentService`).
 
 Si el pago es APROBADO, la orden se marca como confirmada, se genera la guía de despacho en `ShippingService` y se registra una alerta de éxito en `NotificationService`.
 
