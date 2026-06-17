@@ -1,0 +1,6 @@
+# Ignorar todo excepto el proyecto
+/*
+!/.gitignore
+!/Desktop
+/Desktop/*
+!/Desktop/PlataformaVentaOnline-main
