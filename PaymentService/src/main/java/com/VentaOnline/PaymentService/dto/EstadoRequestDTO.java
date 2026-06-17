@@ -1,0 +1,15 @@
+package com.VentaOnline.PaymentService.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class EstadoRequestDTO {
+    // Nuevo estado del pago "APROBADO", "RECHAZADO", "REEMBOLSADO")
+    @NotBlank(message = "El estado es obligatorio")
+    private String estado;
+}
