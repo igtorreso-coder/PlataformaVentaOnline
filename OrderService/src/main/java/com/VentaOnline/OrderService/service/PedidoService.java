@@ -39,7 +39,7 @@ public class PedidoService {
         Pedido pedido = pedidoMapper.toEntity(request);
         BigDecimal total = BigDecimal.ZERO;
         for (PedidoDetalle detalle : pedido.getDetalles()) {
-            ProductoResponse producto = productoClient.getProductoById(detalle.getProductoId());
+            ProductoResponse producto = productoClient.obtenerProductoPorId(detalle.getProductoId());
             detalle.setPrecioUnitario(producto.getPrecio());
             detalle.setSubtotal(producto.getPrecio().multiply(BigDecimal.valueOf(detalle.getCantidad())));
             total = total.add(detalle.getSubtotal());
@@ -64,7 +64,7 @@ public class PedidoService {
     }
 
     @Transactional(readOnly = true)
-    public PedidoResponseDTO obtenerPedidoById(Long id) {
+    public PedidoResponseDTO obtenerPedidoPorId(Long id) {
         log.info("Obteniendo pedido con ID: {}", id);
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Pedido no encontrado con ID: " + id));
@@ -74,7 +74,7 @@ public class PedidoService {
     }
 
     @Transactional(readOnly = true)
-    public List<PedidoResponseDTO> obtenerPedidosByUsuario(Long usuarioId) {
+    public List<PedidoResponseDTO> obtenerPedidosPorUsuario(Long usuarioId) {
         log.info("Obteniendo pedidos para usuario ID: {}", usuarioId);
         List<Pedido> pedidos = pedidoRepository.findByUsuarioIdOrderByCreatedAtDesc(usuarioId);
         if (pedidos.isEmpty()) {
@@ -116,7 +116,7 @@ public class PedidoService {
 
     private String getNombreUsuario(Long usuarioId) {
         try {
-            return usuarioClient.getUsuarioById(usuarioId).getNombreCompleto();
+            return usuarioClient.obtenerUsuarioPorId(usuarioId).getNombreCompleto();
         } catch (RuntimeException e) {
             log.warn("No se pudo obtener el nombre del usuario ID {}: {}", usuarioId, e.getMessage());
             return "Usuario ID: " + usuarioId;
@@ -125,7 +125,7 @@ public class PedidoService {
 
     private String getNombreUsuarioSafe(Long usuarioId) {
         try {
-            return usuarioClient.getUsuarioById(usuarioId).getNombreCompleto();
+            return usuarioClient.obtenerUsuarioPorId(usuarioId).getNombreCompleto();
         } catch (RuntimeException e) {
             return "Usuario ID: " + usuarioId;
         }
@@ -139,7 +139,7 @@ public class PedidoService {
                         id -> id,
                         id -> {
                             try {
-                                return productoClient.getProductoById(id).getNombre();
+                                return productoClient.obtenerProductoPorId(id).getNombre();
                             } catch (RuntimeException e) {
                                 return "Producto ID: " + id;
                             }

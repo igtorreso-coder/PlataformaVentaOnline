@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -95,9 +94,9 @@ class PedidoServiceTest {
 
     @Test
     void crearPedido_deberiaCrearYRetornar() {
-        when(usuarioClient.getUsuarioById(1L)).thenReturn(usuarioResponse);
+        when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
         when(pedidoMapper.toEntity(requestDTO)).thenReturn(testPedido);
-        when(productoClient.getProductoById(1L)).thenReturn(productoResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(testPedido);
         when(pedidoMapper.toResponse(any(Pedido.class), anyString())).thenReturn(responseDTO);
 
@@ -111,8 +110,8 @@ class PedidoServiceTest {
     @Test
     void obtenerTodosPedidos_deberiaRetornarLista() {
         when(pedidoRepository.findAll()).thenReturn(List.of(testPedido));
-        when(usuarioClient.getUsuarioById(1L)).thenReturn(usuarioResponse);
-        when(productoClient.getProductoById(1L)).thenReturn(productoResponse);
+        when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
         when(pedidoMapper.toResponse(any(Pedido.class), anyString(), anyMap()))
                 .thenReturn(responseDTO);
 
@@ -122,30 +121,30 @@ class PedidoServiceTest {
     }
 
     @Test
-    void obtenerPedidoById_deberiaRetornarPedido() {
+    void obtenerPedidoPorId_deberiaRetornarPedido() {
         when(pedidoRepository.findById(1L)).thenReturn(Optional.of(testPedido));
-        when(usuarioClient.getUsuarioById(1L)).thenReturn(usuarioResponse);
-        when(productoClient.getProductoById(1L)).thenReturn(productoResponse);
+        when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
         when(pedidoMapper.toResponse(any(Pedido.class), anyString(), anyMap()))
                 .thenReturn(responseDTO);
 
-        PedidoResponseDTO result = pedidoService.obtenerPedidoById(1L);
+        PedidoResponseDTO result = pedidoService.obtenerPedidoPorId(1L);
 
         assertNotNull(result);
     }
 
     @Test
-    void obtenerPedidoById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerPedidoPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(pedidoRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> pedidoService.obtenerPedidoById(99L));
+        assertThrows(NoSuchElementException.class, () -> pedidoService.obtenerPedidoPorId(99L));
     }
 
     @Test
     void actualizarEstadoPedido_deberiaActualizarEstado() {
         when(pedidoRepository.findById(1L)).thenReturn(Optional.of(testPedido));
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(testPedido);
-        when(usuarioClient.getUsuarioById(1L)).thenReturn(usuarioResponse);
+        when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
         when(pedidoMapper.toResponse(any(Pedido.class), anyString())).thenReturn(responseDTO);
 
         PedidoResponseDTO result = pedidoService.actualizarEstadoPedido(1L, "CONFIRMADO");

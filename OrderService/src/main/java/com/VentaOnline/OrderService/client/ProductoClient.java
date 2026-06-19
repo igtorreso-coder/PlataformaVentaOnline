@@ -13,7 +13,7 @@ public class ProductoClient {
     @Autowired
     private RestClient productsRestClient;
 
-    public ProductoResponse getProductoById(Long productoId) {
+    public ProductoResponse obtenerProductoPorId(Long productoId) {
         log.info("Obteniendo producto con ID: {}", productoId);
         try {
             return productsRestClient.get()

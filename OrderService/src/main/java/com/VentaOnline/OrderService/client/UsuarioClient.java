@@ -13,7 +13,7 @@ public class UsuarioClient {
     @Autowired
     private RestClient usersRestClient;
 
-    public UsuarioResponse getUsuarioById(Long usuarioId) {
+    public UsuarioResponse obtenerUsuarioPorId(Long usuarioId) {
         log.info("Obteniendo usuario con ID: {}", usuarioId);
         try {
             return usersRestClient.get()
