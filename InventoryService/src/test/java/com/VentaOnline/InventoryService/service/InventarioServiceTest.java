@@ -1,4 +1,4 @@
-package com.VentaOnline.InventoryService.service;
+﻿package com.VentaOnline.InventoryService.service;
 
 import com.VentaOnline.InventoryService.client.ProductoClient;
 import com.VentaOnline.InventoryService.dto.InventarioRequestDTO;
