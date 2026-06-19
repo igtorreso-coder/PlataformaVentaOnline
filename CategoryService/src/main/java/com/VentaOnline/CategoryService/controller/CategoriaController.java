@@ -30,7 +30,7 @@ public class CategoriaController {
     @GetMapping
     public ResponseEntity<List<CategoriaResponseDTO>> obtenerCategorias() {
         log.info("GET /api/categorias");
-        return ResponseEntity.ok(categoriaService.conseguirTodasCategorias());
+        return ResponseEntity.ok(categoriaService.obtenerTodasLasCategorias());
     }
 
     @Operation(summary = "Obtener categoría por ID", description = "Retorna los detalles de una categoría por su ID")
@@ -41,7 +41,7 @@ public class CategoriaController {
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaResponseDTO> obtenerCategoria(@PathVariable Long id) {
         log.info("GET /api/categorias/{}", id);
-        return ResponseEntity.ok(categoriaService.buscarCategoriaById(id));
+        return ResponseEntity.ok(categoriaService.buscarCategoriaPorId(id));
     }
 
     @Operation(summary = "Crear nueva categoría", description = "Crea una nueva categoría de producto")

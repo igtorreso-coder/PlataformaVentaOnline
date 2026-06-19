@@ -15,7 +15,7 @@ public class UserClient {
     @Autowired
     private RestClient usersRestClient;
 
-    public List<UsuarioDTO> getUsers() {
+    public List<UsuarioDTO> obtenerUsuarios() {
         log.info("Obteniendo usuarios desde users-service");
         try {
             return usersRestClient.get()

@@ -76,7 +76,7 @@ class CategoriaServiceTest {
     void conseguirTodasCategorias_deberiaRetornarLista() {
         when(categoriaRepository.findAll()).thenReturn(List.of(testCategoria));
 
-        List<CategoriaResponseDTO> result = categoriaService.conseguirTodasCategorias();
+        List<CategoriaResponseDTO> result = categoriaService.obtenerTodasLasCategorias();
 
         assertEquals(1, result.size());
         assertEquals(testCategoria.getNombre(), result.get(0).getNombre());
@@ -86,7 +86,7 @@ class CategoriaServiceTest {
     void buscarCategoriaById_deberiaRetornarCategoria() {
         when(categoriaRepository.findById(1L)).thenReturn(Optional.of(testCategoria));
 
-        CategoriaResponseDTO result = categoriaService.buscarCategoriaById(1L);
+        CategoriaResponseDTO result = categoriaService.buscarCategoriaPorId(1L);
 
         assertNotNull(result);
         assertEquals(testCategoria.getNombre(), result.getNombre());
@@ -96,7 +96,7 @@ class CategoriaServiceTest {
     void buscarCategoriaById_deberiaLanzarExcepcionCuandoNoExiste() {
         when(categoriaRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> categoriaService.buscarCategoriaById(99L));
+        assertThrows(NoSuchElementException.class, () -> categoriaService.buscarCategoriaPorId(99L));
     }
 
     @Test
