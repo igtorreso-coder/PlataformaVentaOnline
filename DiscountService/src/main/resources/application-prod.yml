@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql:3306/descuentos_db?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8089
