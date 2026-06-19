@@ -15,7 +15,7 @@ public class CategoriaClient {
     @Autowired
     private RestClient categoriesRestClient;
 
-    public CategoriaResponse getCategoriaById(Long categoriaId) {
+    public CategoriaResponse obtenerCategoriaPorId(Long categoriaId) {
         log.info("Obteniendo categoria con ID: {}", categoriaId);
         try {
             return categoriesRestClient.get()
@@ -31,7 +31,7 @@ public class CategoriaClient {
         }
     }
 
-    public List<CategoriaResponse> getCategorias() {
+    public List<CategoriaResponse> obtenerCategorias() {
         log.info("Obteniendo todas las categorias");
         try {
             return categoriesRestClient.get()

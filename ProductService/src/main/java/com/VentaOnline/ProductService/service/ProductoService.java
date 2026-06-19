@@ -28,14 +28,14 @@ public class ProductoService {
                 .toList();
     }
 
-    public ProductoResponseDTO obtenerProductoById(Long id) {
+    public ProductoResponseDTO obtenerProductoPorId(Long id) {
         log.info("Obteniendo producto con ID: {}", id);
         return productoRepository.findById(id)
                 .map(producto -> toResponse(producto, getCategoriaNombre(producto.getCategoriaId())))
                 .orElseThrow(() -> new NoSuchElementException("Producto no encontrado con ID: " + id));
     }
 
-    public List<ProductoResponseDTO> obtenerProductosByCategoria(Long categoriaId) {
+    public List<ProductoResponseDTO> obtenerProductosPorCategoria(Long categoriaId) {
         log.info("Obteniendo productos por categoría ID: {}", categoriaId);
         return productoRepository.findByCategoriaId(categoriaId).stream()
                 .map(producto -> toResponse(producto, getCategoriaNombre(producto.getCategoriaId())))
@@ -45,7 +45,7 @@ public class ProductoService {
     @Transactional
     public ProductoResponseDTO crearProducto(ProductoRequestDTO request) {
         log.info("Creando nuevo producto: {}", request.getNombre());
-        CategoriaResponse categoria = categoriaClient.getCategoriaById(request.getCategoriaId());
+        CategoriaResponse categoria = categoriaClient.obtenerCategoriaPorId(request.getCategoriaId());
         Producto producto = Producto.builder()
                 .nombre(request.getNombre())
                 .descripcion(request.getDescripcion())
@@ -62,7 +62,7 @@ public class ProductoService {
         log.info("Actualizando producto con ID: {}", id);
         Producto existing = productoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Producto no encontrado con ID: " + id));
-        CategoriaResponse categoria = categoriaClient.getCategoriaById(request.getCategoriaId());
+        CategoriaResponse categoria = categoriaClient.obtenerCategoriaPorId(request.getCategoriaId());
         existing.setNombre(request.getNombre());
         existing.setDescripcion(request.getDescripcion());
         existing.setPrecio(request.getPrecio());
@@ -82,12 +82,12 @@ public class ProductoService {
 
     public List<CategoriaResponse> obtenerCategorias() {
         log.info("Consultando microservicio de categorías desde productos");
-        return categoriaClient.getCategorias();
+        return categoriaClient.obtenerCategorias();
     }
 
     private String getCategoriaNombre(Long categoriaId) {
         try {
-            CategoriaResponse categoria = categoriaClient.getCategoriaById(categoriaId);
+            CategoriaResponse categoria = categoriaClient.obtenerCategoriaPorId(categoriaId);
             return categoria.getNombre();
         } catch (RuntimeException e) {
             log.warn("No se pudo obtener el nombre de la categoría ID {}: {}", categoriaId, e.getMessage());
