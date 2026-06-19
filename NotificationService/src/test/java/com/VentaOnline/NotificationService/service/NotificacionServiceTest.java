@@ -100,21 +100,21 @@ class NotificacionServiceTest {
     }
 
     @Test
-    void obtenerNotificacionById_deberiaRetornarNotificacion() {
+    void obtenerNotificacionPorId_deberiaRetornarNotificacion() {
         when(notificacionRepository.findById(1L)).thenReturn(Optional.of(notificacionPendiente));
 
-        NotificacionResponseDTO result = notificacionService.obtenerNotificacionById(1L);
+        NotificacionResponseDTO result = notificacionService.obtenerNotificacionPorId(1L);
 
         assertNotNull(result);
         assertEquals(notificacionPendiente.getAsunto(), result.getAsunto());
     }
 
     @Test
-    void obtenerNotificacionById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerNotificacionPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(notificacionRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,
-                () -> notificacionService.obtenerNotificacionById(99L));
+                () -> notificacionService.obtenerNotificacionPorId(99L));
     }
 
     @Test

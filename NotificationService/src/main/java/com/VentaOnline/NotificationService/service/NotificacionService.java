@@ -52,14 +52,14 @@ public class NotificacionService {
                 .toList();
     }
 
-    public NotificacionResponseDTO obtenerNotificacionById(Long id) {
+    public NotificacionResponseDTO obtenerNotificacionPorId(Long id) {
         log.info("Obteniendo notificacion con ID: {}", id);
         return notificacionRepository.findById(id)
                 .map(this::toResponse)
                 .orElseThrow(() -> new NoSuchElementException("Notificación no encontrada con ID: " + id));
     }
 
-    public List<NotificacionResponseDTO> obtenerNotificacionesByUsuario(Long usuarioId) {
+    public List<NotificacionResponseDTO> obtenerNotificacionesPorUsuario(Long usuarioId) {
         log.info("Obteniendo notificaciones para usuario ID: {}", usuarioId);
         return notificacionRepository.findByUsuarioIdOrderByCreatedAtDesc(usuarioId).stream()
                 .map(this::toResponse)
