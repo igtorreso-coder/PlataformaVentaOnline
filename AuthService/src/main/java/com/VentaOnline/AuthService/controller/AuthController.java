@@ -81,7 +81,7 @@ public class AuthController {
     @GetMapping("/usuarios/{id}")
     public ResponseEntity<AuthUserResponseDTO> obtenerUsuario(@PathVariable Long id) {
         log.info("GET /api/auth/usuarios/{}", id);
-        return ResponseEntity.ok(authService.obtenerById(id));
+        return ResponseEntity.ok(authService.obtenerPorId(id));
     }
 
     @Operation(summary = "Actualizar rol de usuario", description = "Cambia el rol (USER/ADMIN) de un usuario de autenticación")
