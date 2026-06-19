@@ -85,7 +85,7 @@ class InventarioServiceTest {
 
     @Test
     void crearMovimiento_deberiaCrearEntrada() {
-        when(productoClient.getProductoById(1L)).thenReturn(productoResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
         when(inventarioRepository.save(any(Inventario.class))).thenReturn(movimientoEntrada);
 
         InventarioResponseDTO result = inventarioService.crearMovimiento(entradaRequest);
@@ -98,7 +98,7 @@ class InventarioServiceTest {
 
     @Test
     void crearMovimiento_deberiaCrearSalida() {
-        when(productoClient.getProductoById(1L)).thenReturn(productoResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
         when(inventarioRepository.save(any(Inventario.class))).thenReturn(movimientoSalida);
 
         InventarioResponseDTO result = inventarioService.crearMovimiento(salidaRequest);
@@ -125,7 +125,7 @@ class InventarioServiceTest {
     @Test
     void obtenerTodosMovimientos_deberiaRetornarLista() {
         when(inventarioRepository.findAll()).thenReturn(List.of(movimientoEntrada, movimientoSalida));
-        when(productoClient.getProductoById(1L)).thenReturn(productoResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
 
         List<InventarioResponseDTO> result = inventarioService.obtenerTodosMovimientos();
 
@@ -133,25 +133,25 @@ class InventarioServiceTest {
     }
 
     @Test
-    void obtenerMovimientoById_deberiaRetornarMovimiento() {
+    void obtenerMovimientoPorId_deberiaRetornarMovimiento() {
         when(inventarioRepository.findById(1L)).thenReturn(Optional.of(movimientoEntrada));
-        when(productoClient.getProductoById(1L)).thenReturn(productoResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
 
-        InventarioResponseDTO result = inventarioService.obtenerMovimientoById(1L);
+        InventarioResponseDTO result = inventarioService.obtenerMovimientoPorId(1L);
 
         assertNotNull(result);
         assertEquals("ENTRADA", result.getTipo());
     }
 
     @Test
-    void obtenerMovimientoById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerMovimientoPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(inventarioRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> inventarioService.obtenerMovimientoById(99L));
+        assertThrows(NoSuchElementException.class, () -> inventarioService.obtenerMovimientoPorId(99L));
     }
 
     @Test
-    void obtenerStockByProducto_deberiaCalcularStockCorrectamente() {
+    void obtenerStockPorProducto_deberiaCalcularStockCorrectamente() {
         List<Inventario> movimientos = List.of(
                 Inventario.builder().tipo("ENTRADA").cantidad(10).build(),
                 Inventario.builder().tipo("ENTRADA").cantidad(5).build(),
@@ -159,41 +159,41 @@ class InventarioServiceTest {
         );
         when(inventarioRepository.findByProductoIdOrderByCreatedAtDesc(1L)).thenReturn(movimientos);
 
-        Integer stock = inventarioService.obtenerStockByProducto(1L);
+        Integer stock = inventarioService.obtenerStockPorProducto(1L);
 
         assertEquals(12, stock);
     }
 
     @Test
-    void obtenerStockByProducto_deberiaRetornarCeroCuandoNoHayMovimientos() {
+    void obtenerStockPorProducto_deberiaRetornarCeroCuandoNoHayMovimientos() {
         when(inventarioRepository.findByProductoIdOrderByCreatedAtDesc(1L)).thenReturn(List.of());
 
-        Integer stock = inventarioService.obtenerStockByProducto(1L);
+        Integer stock = inventarioService.obtenerStockPorProducto(1L);
 
         assertEquals(0, stock);
     }
 
     @Test
-    void obtenerStockByProducto_deberiaManejarAjuste() {
+    void obtenerStockPorProducto_deberiaManejarAjuste() {
         List<Inventario> movimientos = List.of(
                 Inventario.builder().tipo("ENTRADA").cantidad(10).build(),
                 Inventario.builder().tipo("AJUSTE").cantidad(50).build()
         );
         when(inventarioRepository.findByProductoIdOrderByCreatedAtDesc(1L)).thenReturn(movimientos);
 
-        Integer stock = inventarioService.obtenerStockByProducto(1L);
+        Integer stock = inventarioService.obtenerStockPorProducto(1L);
 
         assertEquals(50, stock);
     }
 
     @Test
-    void obtenerStockByProducto_deberiaRetornarMinimoCero() {
+    void obtenerStockPorProducto_deberiaRetornarMinimoCero() {
         List<Inventario> movimientos = List.of(
                 Inventario.builder().tipo("SALIDA").cantidad(10).build()
         );
         when(inventarioRepository.findByProductoIdOrderByCreatedAtDesc(1L)).thenReturn(movimientos);
 
-        Integer stock = inventarioService.obtenerStockByProducto(1L);
+        Integer stock = inventarioService.obtenerStockPorProducto(1L);
 
         assertEquals(0, stock);
     }

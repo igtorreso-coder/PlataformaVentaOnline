@@ -15,7 +15,7 @@ public class ProductoClient {
     @Autowired
     private RestClient productsRestClient;
 
-    public ProductoResponse getProductoById(Long productoId) {
+    public ProductoResponse obtenerProductoPorId(Long productoId) {
         log.info("Obteniendo producto con ID: {}", productoId);
         try {
             return productsRestClient.get()
@@ -31,7 +31,7 @@ public class ProductoClient {
         }
     }
 
-    public List<ProductoResponse> getProductos() {
+    public List<ProductoResponse> obtenerProductos() {
         log.info("Obteniendo todos los productos");
         try {
             return productsRestClient.get()
