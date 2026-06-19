@@ -141,18 +141,18 @@ El MySQL de Docker se expone en el puerto `3307` para no interferir con instalac
 Los siguientes datos se crean automáticamente al iniciar los servicios (vía Flyway):
 
 | Servicio | Registros |
-|---|---|
-| UserService | 3 usuarios: Ignacio Torres, Maria Garcia, Juan Perez |
-| AuthService | 3 cuentas con contraseña `123456` |
+|---|---|---|
+| UserService | 5 usuarios: Ignacio Torres, Maria Garcia, Juan Perez, Ana Lopez, Carlos Ruiz |
+| AuthService | 5 cuentas con contraseña `123456` |
 | CategoryService | 5 categorías: Electrónica, Ropa, Hogar, Deportes, Libros |
-| ProductService | 8 productos con precios desde $350 hasta $25,000 |
-| InventoryService | 8 movimientos de entrada (stock inicial) |
-| CartService | 2 carritos activos con items |
+| ProductService | 18 productos (8 originales + 10 nuevos: iPad Air, Audífonos Sony, Vestido, Chaqueta, Lámpara, Cojín, Pesas, Tapete Yoga, El Principito, Cuaderno) |
+| InventoryService | 27 movimientos (entradas iniciales + stock nuevos productos + salidas por ventas) |
+| CartService | 4 carritos: 2 activos (usuarios 1 y 3), 1 completado (usuario 1), items variados |
 | DiscountService | 4 cupones: BIENVENIDO, VERANO2025, ENVIOGRATIS, VIP10 |
-| OrderService | 2 pedidos (1 confirmado, 1 pendiente) |
-| PaymentService | 2 pagos (1 aprobado, 1 pendiente) |
-| ShippingService | 1 envío en tránsito |
-| NotificationService | 2 notificaciones |
+| OrderService | 4 pedidos (1 confirmado, 1 pendiente, 1 enviado, 1 entregado) |
+| PaymentService | 4 pagos (3 aprobados, 1 pendiente) |
+| ShippingService | 4 envíos (1 enviado, 1 pendiente, 1 enviado, 1 entregado) |
+| NotificationService | 5 notificaciones (3 enviadas, 2 pendientes) |
 
 ### Credenciales de prueba
 
@@ -161,3 +161,5 @@ Los siguientes datos se crean automáticamente al iniciar los servicios (vía Fl
 | `ignacio@email.com` | `123456` | ADMIN |
 | `maria@email.com` | `123456` | USER |
 | `juan@email.com` | `123456` | USER |
+| `ana@email.com` | `123456` | USER |
+| `carlos@email.com` | `123456` | USER |
