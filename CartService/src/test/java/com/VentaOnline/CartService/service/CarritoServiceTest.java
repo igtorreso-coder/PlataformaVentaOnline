@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,7 +97,7 @@ class CarritoServiceTest {
     void obtenerCarritoPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(carritoRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> carritoService.obtenerCarritoPorId(99L));
+        assertThrows(NoSuchElementException.class, () -> carritoService.obtenerCarritoPorId(99L));
     }
 
     @Test
@@ -115,7 +116,7 @@ class CarritoServiceTest {
         when(carritoRepository.findByUsuarioIdAndEstado(1L, "ACTIVO"))
                 .thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> carritoService.obtenerCarritoActivoPorUsuario(1L));
     }
 

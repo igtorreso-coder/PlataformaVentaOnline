@@ -3,6 +3,7 @@ package com.VentaOnline.CartService.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,7 @@ public class CarritoService {
     public CarritoResponseDTO obtenerCarritoPorId(Long id) {
         log.info("Obteniendo carrito por ID: {}", id);
         Carrito carrito = carritoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado con ID: " + id));
         return toResponse(carrito);
     }
 
@@ -56,7 +57,7 @@ public class CarritoService {
     public CarritoResponseDTO obtenerCarritoActivoPorUsuario(Long usuarioId) {
         log.info("Obteniendo carrito activo para usuario: {}", usuarioId);
         Carrito carrito = carritoRepository.findByUsuarioIdAndEstado(usuarioId, "ACTIVO")
-                .orElseThrow(() -> new IllegalArgumentException("No hay carrito activo para el usuario: " + usuarioId));
+                .orElseThrow(() -> new NoSuchElementException("No hay carrito activo para el usuario: " + usuarioId));
         return toResponse(carrito);
     }
 
@@ -64,7 +65,7 @@ public class CarritoService {
     public CarritoResponseDTO agregarItem(Long carritoId, CarritoItemRequestDTO request) {
         log.info("Agregando producto {} al carrito {}", request.getProductoId(), carritoId);
         Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado con ID: " + carritoId));
 
         if (!"ACTIVO".equals(carrito.getEstado())) {
             throw new IllegalArgumentException("El carrito no está activo");
@@ -73,7 +74,7 @@ public class CarritoService {
         var productoResponse = productoClient.obtenerProducto(request.getProductoId());
 
         if (productoResponse == null) {
-            throw new IllegalArgumentException("Producto no encontrado con ID: " + request.getProductoId());
+            throw new NoSuchElementException("Producto no encontrado con ID: " + request.getProductoId());
         }
 
         BigDecimal precioUnitario = productoResponse.getPrecio();
@@ -118,12 +119,12 @@ public class CarritoService {
     public CarritoResponseDTO eliminarItem(Long carritoId, Long itemId) {
         log.info("Eliminando item {} del carrito {}", itemId, carritoId);
         Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado con ID: " + carritoId));
 
         CarritoItem item = carrito.getItems().stream()
                 .filter(i -> i.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Item no encontrado con ID: " + itemId));
+                .orElseThrow(() -> new NoSuchElementException("Item no encontrado con ID: " + itemId));
 
         carrito.getItems().remove(item);
         carrito.setUpdatedAt(LocalDateTime.now());
@@ -136,7 +137,7 @@ public class CarritoService {
     public void eliminarCarrito(Long id) {
         log.info("Eliminando carrito: {}", id);
         Carrito carrito = carritoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado con ID: " + id));
         carritoRepository.delete(carrito);
         log.info("Carrito {} eliminado", id);
     }
@@ -145,7 +146,7 @@ public class CarritoService {
     public CarritoResponseDTO finalizarCarrito(Long id) {
         log.info("Finalizando carrito: {}", id);
         Carrito carrito = carritoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado con ID: " + id));
 
         if (!"ACTIVO".equals(carrito.getEstado())) {
             throw new IllegalArgumentException("El carrito no está activo");
