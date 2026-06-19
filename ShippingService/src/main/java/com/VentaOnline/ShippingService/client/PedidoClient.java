@@ -14,7 +14,7 @@ public class PedidoClient {
     @Autowired
     private RestClient ordersRestClient;
 
-    public PedidoResponse getPedidoById(Long pedidoId) {
+    public PedidoResponse obtenerPedidoPorId(Long pedidoId) {
         log.info("Obteniendo pedido con ID: {}", pedidoId);
         try {
             return ordersRestClient.get()

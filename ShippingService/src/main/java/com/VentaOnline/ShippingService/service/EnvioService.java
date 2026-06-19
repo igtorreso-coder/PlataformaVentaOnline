@@ -27,7 +27,7 @@ public class EnvioService {
     public EnvioResponseDTO crearEnvio(EnvioRequestDTO request) {
         log.info("Creando envío para pedido ID: {}", request.getPedidoId());
 
-        PedidoResponse pedido = pedidoClient.getPedidoById(request.getPedidoId());
+        PedidoResponse pedido = pedidoClient.obtenerPedidoPorId(request.getPedidoId());
 
         if (!"CONFIRMADO".equalsIgnoreCase(pedido.getEstado())) {
             throw new IllegalArgumentException("El pedido ID " + request.getPedidoId()
@@ -53,7 +53,7 @@ public class EnvioService {
     }
 
     @Transactional(readOnly = true)
-    public EnvioResponseDTO obtenerEnvioById(Long id) {
+    public EnvioResponseDTO obtenerEnvioPorId(Long id) {
         log.info("Obteniendo envío con ID: {}", id);
         return envioRepository.findById(id)
                 .map(this::toResponse)
@@ -61,7 +61,7 @@ public class EnvioService {
     }
 
     @Transactional(readOnly = true)
-    public List<EnvioResponseDTO> obtenerEnviosByPedido(Long pedidoId) {
+    public List<EnvioResponseDTO> obtenerEnviosPorPedido(Long pedidoId) {
         log.info("Obteniendo envíos para pedido ID: {}", pedidoId);
         return envioRepository.findByPedidoIdOrderByCreatedAtDesc(pedidoId).stream()
                 .map(this::toResponse)
