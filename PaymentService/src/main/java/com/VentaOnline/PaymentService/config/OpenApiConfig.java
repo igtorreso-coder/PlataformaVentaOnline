@@ -1,9 +1,7 @@
 package com.VentaOnline.PaymentService.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,14 +12,8 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Payment Service API")
-                        .description("Microservicio de Pagos - Gestión de pagos, procesamiento y actualización de estados")
-                        .version("1.0.0")
-                        .contact(new Contact()
-                                .name("Plataforma Venta Online")
-                                .email("soporte@ventaonline.com"))
-                        .license(new License()
-                                .name("Apache 2.0")
-                                .url("http://springdoc.org")));
+                        .title("Payment Service")
+                        .description("Procesamiento de pagos")
+                        .version("1.0.0"));
     }
 }
