@@ -25,7 +25,8 @@ public class UserServiceClient {
                     .retrieve()
                     .body(Void.class);
         } catch (Exception e) {
-            log.warn("No se pudo sincronizar usuario con UserServices: {}", e.getMessage());
+            log.error("Error al sincronizar usuario ID {} con UserServices: {}", id, e.getMessage());
+            throw new RuntimeException("No se pudo sincronizar el usuario con el servicio de usuarios", e);
         }
     }
 }
