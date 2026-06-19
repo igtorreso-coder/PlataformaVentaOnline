@@ -9,6 +9,7 @@ import com.VentaOnline.NotificationService.dto.NotificacionRequestDTO;
 import com.VentaOnline.NotificationService.dto.NotificacionResponseDTO;
 import com.VentaOnline.NotificationService.service.NotificacionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class NotificacionController {
         @ApiResponse(responseCode = "404", description = "Notificación no encontrada")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<NotificacionResponseDTO> obtenerNotificacionPorId(@PathVariable Long id) {
+    public ResponseEntity<NotificacionResponseDTO> obtenerNotificacionPorId(@Parameter(description = "ID de la notificación", example = "1") @PathVariable Long id) {
         log.info("GET /api/notificaciones/{}", id);
         return ResponseEntity.ok(notificacionService.obtenerNotificacionPorId(id));
     }
@@ -47,7 +48,7 @@ public class NotificacionController {
     @Operation(summary = "Obtener notificaciones por usuario", description = "Retorna las notificaciones filtradas por ID de usuario")
     @ApiResponse(responseCode = "200", description = "Lista de notificaciones del usuario")
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<List<NotificacionResponseDTO>> obtenerNotificacionesPorUsuario(@PathVariable Long usuarioId) {
+    public ResponseEntity<List<NotificacionResponseDTO>> obtenerNotificacionesPorUsuario(@Parameter(description = "ID del usuario", example = "1") @PathVariable Long usuarioId) {
         log.info("GET /api/notificaciones/usuario/{}", usuarioId);
         return ResponseEntity.ok(notificacionService.obtenerNotificacionesPorUsuario(usuarioId));
     }
@@ -73,7 +74,7 @@ public class NotificacionController {
         @ApiResponse(responseCode = "404", description = "Notificación no encontrada")
     })
     @PostMapping("/{id}/enviar")
-    public ResponseEntity<NotificacionResponseDTO> enviarNotificacion(@PathVariable Long id) {
+    public ResponseEntity<NotificacionResponseDTO> enviarNotificacion(@Parameter(description = "ID de la notificación a enviar", example = "1") @PathVariable Long id) {
         log.info("POST /api/notificaciones/{}/enviar", id);
         return ResponseEntity.ok(notificacionService.enviarNotificacion(id));
     }
@@ -84,7 +85,7 @@ public class NotificacionController {
         @ApiResponse(responseCode = "404", description = "Notificación no encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarNotificacion(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarNotificacion(@Parameter(description = "ID de la notificación a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/notificaciones/{}", id);
         notificacionService.eliminarNotificacion(id);
         return ResponseEntity.noContent().build();

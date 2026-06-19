@@ -10,6 +10,7 @@ import com.VentaOnline.ProductService.dto.ProductoRequestDTO;
 import com.VentaOnline.ProductService.dto.ProductoResponseDTO;
 import com.VentaOnline.ProductService.service.ProductoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class ProductoController {
         @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ProductoResponseDTO> obtenerProductoPorId(@PathVariable Long id) {
+    public ResponseEntity<ProductoResponseDTO> obtenerProductoPorId(@Parameter(description = "ID del producto", example = "1") @PathVariable Long id) {
         log.info("GET /api/productos/{}", id);
         return ResponseEntity.ok(productoService.obtenerProductoPorId(id));
     }
@@ -47,7 +48,7 @@ public class ProductoController {
     @Operation(summary = "Obtener productos por categoría", description = "Retorna los productos filtrados por ID de categoría")
     @ApiResponse(responseCode = "200", description = "Lista de productos de la categoría")
     @GetMapping("/categoria/{categoriaId}")
-    public ResponseEntity<List<ProductoResponseDTO>> obtenerProductosPorCategoria(@PathVariable Long categoriaId) {
+    public ResponseEntity<List<ProductoResponseDTO>> obtenerProductosPorCategoria(@Parameter(description = "ID de la categoría", example = "1") @PathVariable Long categoriaId) {
         log.info("GET /api/productos/categoria/{}", categoriaId);
         return ResponseEntity.ok(productoService.obtenerProductosPorCategoria(categoriaId));
     }
@@ -73,7 +74,7 @@ public class ProductoController {
         @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProductoResponseDTO> actualizarProducto(@PathVariable Long id,
+    public ResponseEntity<ProductoResponseDTO> actualizarProducto(@Parameter(description = "ID del producto", example = "1") @PathVariable Long id,
             @Valid @RequestBody ProductoRequestDTO request) {
         log.info("PUT /api/productos/{}", id);
         return ResponseEntity.ok(productoService.actualizarProducto(id, request));
@@ -85,7 +86,7 @@ public class ProductoController {
         @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarProducto(@Parameter(description = "ID del producto a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/productos/{}", id);
         productoService.eliminarProducto(id);
         return ResponseEntity.noContent().build();

@@ -10,6 +10,7 @@ import com.VentaOnline.UserServices.dto.UsuarioRequestDTO;
 import com.VentaOnline.UserServices.dto.UsuarioResponseDTO;
 import com.VentaOnline.UserServices.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class UsuarioController {
         @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> obtenerUsuario(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDTO> obtenerUsuario(@Parameter(description = "ID del usuario", example = "1") @PathVariable Long id) {
         log.info("GET /api/usuarios/{}", id);
         return ResponseEntity.ok(usuarioService.obtenerUsuarioPorId(id));
     }
@@ -65,7 +66,7 @@ public class UsuarioController {
         @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(@PathVariable Long id,
+    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(@Parameter(description = "ID del usuario", example = "1") @PathVariable Long id,
             @Valid @RequestBody UsuarioRequestDTO request) {
         log.info("PUT /api/usuarios/{}", id);
         return ResponseEntity.ok(usuarioService.actualizarUsuario(id, request));
@@ -77,7 +78,7 @@ public class UsuarioController {
         @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarUsuario(@Parameter(description = "ID del usuario a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/usuarios/{}", id);
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();

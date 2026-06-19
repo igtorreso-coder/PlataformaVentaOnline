@@ -10,6 +10,7 @@ import com.VentaOnline.PaymentService.dto.PagoRequestDTO;
 import com.VentaOnline.PaymentService.dto.PagoResponseDTO;
 import com.VentaOnline.PaymentService.service.PagoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +41,7 @@ public class PagoController {
         @ApiResponse(responseCode = "404", description = "Pago no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<PagoResponseDTO> obtenerPagoPorId(@PathVariable Long id) {
+    public ResponseEntity<PagoResponseDTO> obtenerPagoPorId(@Parameter(description = "ID del pago", example = "1") @PathVariable Long id) {
         log.info("GET /api/pagos/{}", id);
         return ResponseEntity.ok(pagoService.obtenerPagoPorId(id));
     }
@@ -48,7 +49,7 @@ public class PagoController {
     @Operation(summary = "Obtener pagos por pedido", description = "Retorna los pagos filtrados por ID de pedido")
     @ApiResponse(responseCode = "200", description = "Lista de pagos del pedido")
     @GetMapping("/pedido/{pedidoId}")
-    public ResponseEntity<List<PagoResponseDTO>> obtenerPagosPorPedido(@PathVariable Long pedidoId) {
+    public ResponseEntity<List<PagoResponseDTO>> obtenerPagosPorPedido(@Parameter(description = "ID del pedido", example = "1") @PathVariable Long pedidoId) {
         log.info("GET /api/pagos/pedido/{}", pedidoId);
         return ResponseEntity.ok(pagoService.obtenerPagosPorPedido(pedidoId));
     }
@@ -74,7 +75,7 @@ public class PagoController {
         @ApiResponse(responseCode = "404", description = "Pago no encontrado")
     })
     @PostMapping("/{id}/procesar")
-    public ResponseEntity<PagoResponseDTO> procesarPago(@PathVariable Long id) {
+    public ResponseEntity<PagoResponseDTO> procesarPago(@Parameter(description = "ID del pago a procesar", example = "1") @PathVariable Long id) {
         log.info("POST /api/pagos/{}/procesar", id);
         return ResponseEntity.ok(pagoService.procesarPago(id));
     }
@@ -86,7 +87,7 @@ public class PagoController {
         @ApiResponse(responseCode = "404", description = "Pago no encontrado")
     })
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<PagoResponseDTO> actualizarEstado(@PathVariable Long id,
+    public ResponseEntity<PagoResponseDTO> actualizarEstado(@Parameter(description = "ID del pago", example = "1") @PathVariable Long id,
             @Valid @RequestBody EstadoRequestDTO request) {
         log.info("PATCH /api/pagos/{}/estado", id);
         return ResponseEntity.ok(pagoService.actualizarEstadoPago(id, request.getEstado()));
@@ -98,7 +99,7 @@ public class PagoController {
         @ApiResponse(responseCode = "404", description = "Pago no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarPago(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarPago(@Parameter(description = "ID del pago a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/pagos/{}", id);
         pagoService.eliminarPago(id);
         return ResponseEntity.noContent().build();

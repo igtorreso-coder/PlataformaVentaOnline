@@ -10,6 +10,7 @@ import com.VentaOnline.DiscountService.dto.CuponResponseDTO;
 import com.VentaOnline.DiscountService.dto.ValidarCuponResponse;
 import com.VentaOnline.DiscountService.service.CuponService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +41,7 @@ public class CuponController {
         @ApiResponse(responseCode = "404", description = "Cupón no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<CuponResponseDTO> obtenerCuponPorId(@PathVariable Long id) {
+    public ResponseEntity<CuponResponseDTO> obtenerCuponPorId(@Parameter(description = "ID del cupón", example = "1") @PathVariable Long id) {
         log.info("GET /api/descuentos/{}", id);
         return ResponseEntity.ok(cuponService.obtenerCuponPorId(id));
     }
@@ -51,7 +52,7 @@ public class CuponController {
         @ApiResponse(responseCode = "404", description = "Cupón no encontrado")
     })
     @GetMapping("/codigo/{codigo}")
-    public ResponseEntity<CuponResponseDTO> obtenerCuponPorCodigo(@PathVariable String codigo) {
+    public ResponseEntity<CuponResponseDTO> obtenerCuponPorCodigo(@Parameter(description = "Código único del cupón", example = "BIENVENIDO") @PathVariable String codigo) {
         log.info("GET /api/descuentos/codigo/{}", codigo);
         return ResponseEntity.ok(cuponService.obtenerCuponPorCodigo(codigo));
     }
@@ -77,7 +78,7 @@ public class CuponController {
         @ApiResponse(responseCode = "404", description = "Cupón no encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<CuponResponseDTO> actualizarCupon(@PathVariable Long id,
+    public ResponseEntity<CuponResponseDTO> actualizarCupon(@Parameter(description = "ID del cupón", example = "1") @PathVariable Long id,
             @Valid @RequestBody CuponRequestDTO request) {
         log.info("PUT /api/descuentos/{}", id);
         return ResponseEntity.ok(cuponService.actualizarCupon(id, request));
@@ -89,7 +90,7 @@ public class CuponController {
         @ApiResponse(responseCode = "404", description = "Cupón no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCupon(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarCupon(@Parameter(description = "ID del cupón a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/descuentos/{}", id);
         cuponService.eliminarCupon(id);
         return ResponseEntity.noContent().build();
@@ -101,7 +102,7 @@ public class CuponController {
         @ApiResponse(responseCode = "404", description = "Cupón no encontrado")
     })
     @PostMapping("/{id}/validar")
-    public ResponseEntity<ValidarCuponResponse> validarCupon(@PathVariable Long id) {
+    public ResponseEntity<ValidarCuponResponse> validarCupon(@Parameter(description = "ID del cupón a validar", example = "1") @PathVariable Long id) {
         log.info("POST /api/descuentos/{}/validar", id);
         return ResponseEntity.ok(cuponService.validarCupon(id));
     }
@@ -113,7 +114,7 @@ public class CuponController {
         @ApiResponse(responseCode = "404", description = "Cupón no encontrado")
     })
     @PostMapping("/{id}/usar")
-    public ResponseEntity<CuponResponseDTO> usarCupon(@PathVariable Long id) {
+    public ResponseEntity<CuponResponseDTO> usarCupon(@Parameter(description = "ID del cupón a usar", example = "1") @PathVariable Long id) {
         log.info("POST /api/descuentos/{}/usar", id);
         return ResponseEntity.ok(cuponService.usarCupon(id));
     }

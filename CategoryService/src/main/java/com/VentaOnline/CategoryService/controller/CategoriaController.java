@@ -10,6 +10,7 @@ import com.VentaOnline.CategoryService.dto.CategoriaResponseDTO;
 import com.VentaOnline.CategoryService.dto.UsuarioDTO;
 import com.VentaOnline.CategoryService.service.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class CategoriaController {
         @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaResponseDTO> obtenerCategoria(@PathVariable Long id) {
+    public ResponseEntity<CategoriaResponseDTO> obtenerCategoria(@Parameter(description = "ID de la categoría", example = "1") @PathVariable Long id) {
         log.info("GET /api/categorias/{}", id);
         return ResponseEntity.ok(categoriaService.buscarCategoriaPorId(id));
     }
@@ -65,7 +66,7 @@ public class CategoriaController {
         @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaResponseDTO> actualizarCategoria(@PathVariable Long id,
+    public ResponseEntity<CategoriaResponseDTO> actualizarCategoria(@Parameter(description = "ID de la categoría", example = "1") @PathVariable Long id,
             @Valid @RequestBody CategoriaRequestDTO request) {
         log.info("PUT /api/categorias/{}", id);
         return ResponseEntity.ok(categoriaService.actualizarCategoria(id, request));
@@ -77,7 +78,7 @@ public class CategoriaController {
         @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCategoria(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarCategoria(@Parameter(description = "ID de la categoría a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/categorias/{}", id);
         categoriaService.eliminarCategoria(id);
         return ResponseEntity.noContent().build();

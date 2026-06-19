@@ -10,6 +10,7 @@ import com.VentaOnline.InventoryService.dto.InventarioResponseDTO;
 import com.VentaOnline.InventoryService.dto.ProductoResponse;
 import com.VentaOnline.InventoryService.service.InventarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class InventarioController {
         @ApiResponse(responseCode = "404", description = "Movimiento no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<InventarioResponseDTO> obtenerMovimientoPorId(@PathVariable Long id) {
+    public ResponseEntity<InventarioResponseDTO> obtenerMovimientoPorId(@Parameter(description = "ID del movimiento", example = "1") @PathVariable Long id) {
         log.info("GET /api/inventarios/{}", id);
         return ResponseEntity.ok(inventarioService.obtenerMovimientoPorId(id));
     }
@@ -47,7 +48,7 @@ public class InventarioController {
     @Operation(summary = "Obtener movimientos por producto", description = "Retorna los movimientos de inventario filtrados por ID de producto")
     @ApiResponse(responseCode = "200", description = "Lista de movimientos del producto")
     @GetMapping("/producto/{productoId}")
-    public ResponseEntity<List<InventarioResponseDTO>> obtenerMovimientosPorProducto(@PathVariable Long productoId) {
+    public ResponseEntity<List<InventarioResponseDTO>> obtenerMovimientosPorProducto(@Parameter(description = "ID del producto", example = "1") @PathVariable Long productoId) {
         log.info("GET /api/inventarios/producto/{}", productoId);
         return ResponseEntity.ok(inventarioService.obtenerMovimientosPorProducto(productoId));
     }
@@ -69,7 +70,7 @@ public class InventarioController {
     @Operation(summary = "Obtener stock por producto", description = "Retorna el stock actual disponible para un producto")
     @ApiResponse(responseCode = "200", description = "Stock actual del producto")
     @GetMapping("/stock/{productoId}")
-    public ResponseEntity<Integer> obtenerStockPorProducto(@PathVariable Long productoId) {
+    public ResponseEntity<Integer> obtenerStockPorProducto(@Parameter(description = "ID del producto a consultar", example = "1") @PathVariable Long productoId) {
         log.info("GET /api/inventarios/stock/{}", productoId);
         return ResponseEntity.ok(inventarioService.obtenerStockPorProducto(productoId));
     }

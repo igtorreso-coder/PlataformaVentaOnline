@@ -10,6 +10,7 @@ import com.VentaOnline.OrderService.dto.PedidoRequestDTO;
 import com.VentaOnline.OrderService.dto.PedidoResponseDTO;
 import com.VentaOnline.OrderService.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class PedidoController {
         @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoResponseDTO> obtenerPedidoPorId(@PathVariable Long id) {
+    public ResponseEntity<PedidoResponseDTO> obtenerPedidoPorId(@Parameter(description = "ID del pedido", example = "1") @PathVariable Long id) {
         log.info("GET /api/pedidos/{}", id);
         return ResponseEntity.ok(pedidoService.obtenerPedidoPorId(id));
     }
@@ -47,7 +48,7 @@ public class PedidoController {
     @Operation(summary = "Obtener pedidos por usuario", description = "Retorna los pedidos filtrados por ID de usuario")
     @ApiResponse(responseCode = "200", description = "Lista de pedidos del usuario")
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidosPorUsuario(@PathVariable Long usuarioId) {
+    public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidosPorUsuario(@Parameter(description = "ID del usuario", example = "1") @PathVariable Long usuarioId) {
         log.info("GET /api/pedidos/usuario/{}", usuarioId);
         return ResponseEntity.ok(pedidoService.obtenerPedidosPorUsuario(usuarioId));
     }
@@ -73,7 +74,7 @@ public class PedidoController {
         @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
     })
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<PedidoResponseDTO> actualizarEstado(@PathVariable Long id,
+    public ResponseEntity<PedidoResponseDTO> actualizarEstado(@Parameter(description = "ID del pedido", example = "1") @PathVariable Long id,
             @Valid @RequestBody EstadoRequestDTO request) {
         log.info("PATCH /api/pedidos/{}/estado", id);
         return ResponseEntity.ok(pedidoService.actualizarEstadoPedido(id, request.getEstado()));
@@ -85,7 +86,7 @@ public class PedidoController {
         @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarPedido(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarPedido(@Parameter(description = "ID del pedido a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/pedidos/{}", id);
         pedidoService.eliminarPedido(id);
         return ResponseEntity.noContent().build();

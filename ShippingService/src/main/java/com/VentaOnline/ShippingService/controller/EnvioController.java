@@ -10,6 +10,7 @@ import com.VentaOnline.ShippingService.dto.EnvioResponseDTO;
 import com.VentaOnline.ShippingService.dto.EstadoRequestDTO;
 import com.VentaOnline.ShippingService.service.EnvioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +41,7 @@ public class EnvioController {
         @ApiResponse(responseCode = "404", description = "Envío no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EnvioResponseDTO> obtenerEnvioPorId(@PathVariable Long id) {
+    public ResponseEntity<EnvioResponseDTO> obtenerEnvioPorId(@Parameter(description = "ID del envío", example = "1") @PathVariable Long id) {
         log.info("GET /api/envios/{}", id);
         return ResponseEntity.ok(envioService.obtenerEnvioPorId(id));
     }
@@ -48,7 +49,7 @@ public class EnvioController {
     @Operation(summary = "Obtener envíos por pedido", description = "Retorna los envíos filtrados por ID de pedido")
     @ApiResponse(responseCode = "200", description = "Lista de envíos del pedido")
     @GetMapping("/pedido/{pedidoId}")
-    public ResponseEntity<List<EnvioResponseDTO>> obtenerEnviosPorPedido(@PathVariable Long pedidoId) {
+    public ResponseEntity<List<EnvioResponseDTO>> obtenerEnviosPorPedido(@Parameter(description = "ID del pedido", example = "1") @PathVariable Long pedidoId) {
         log.info("GET /api/envios/pedido/{}", pedidoId);
         return ResponseEntity.ok(envioService.obtenerEnviosPorPedido(pedidoId));
     }
@@ -74,7 +75,7 @@ public class EnvioController {
         @ApiResponse(responseCode = "404", description = "Envío no encontrado")
     })
     @PostMapping("/{id}/enviar")
-    public ResponseEntity<EnvioResponseDTO> enviarEnvio(@PathVariable Long id) {
+    public ResponseEntity<EnvioResponseDTO> enviarEnvio(@Parameter(description = "ID del envío a procesar", example = "1") @PathVariable Long id) {
         log.info("POST /api/envios/{}/enviar", id);
         return ResponseEntity.ok(envioService.enviarEnvio(id));
     }
@@ -86,7 +87,7 @@ public class EnvioController {
         @ApiResponse(responseCode = "404", description = "Envío no encontrado")
     })
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<EnvioResponseDTO> actualizarEstado(@PathVariable Long id,
+    public ResponseEntity<EnvioResponseDTO> actualizarEstado(@Parameter(description = "ID del envío", example = "1") @PathVariable Long id,
             @Valid @RequestBody EstadoRequestDTO request) {
         log.info("PATCH /api/envios/{}/estado", id);
         return ResponseEntity.ok(envioService.actualizarEstadoEnvio(id, request.getEstado()));
@@ -98,7 +99,7 @@ public class EnvioController {
         @ApiResponse(responseCode = "404", description = "Envío no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEnvio(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarEnvio(@Parameter(description = "ID del envío a eliminar", example = "1") @PathVariable Long id) {
         log.info("DELETE /api/envios/{}", id);
         envioService.eliminarEnvio(id);
         return ResponseEntity.noContent().build();

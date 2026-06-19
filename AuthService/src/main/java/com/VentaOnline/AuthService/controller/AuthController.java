@@ -13,6 +13,7 @@ import com.VentaOnline.AuthService.dto.RolRequestDTO;
 import com.VentaOnline.AuthService.dto.ValidarTokenResponseDTO;
 import com.VentaOnline.AuthService.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,7 +61,7 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "Token inválido o expirado")
     })
     @GetMapping("/validar")
-    public ResponseEntity<ValidarTokenResponseDTO> validarToken(@RequestParam String token) {
+    public ResponseEntity<ValidarTokenResponseDTO> validarToken(@Parameter(description = "Token JWT a validar", example = "5548534372e94a8b85b9e8ec28e08dca1781879243942") @RequestParam String token) {
         log.info("GET /api/auth/validar");
         return ResponseEntity.ok(authService.validarToken(token));
     }
@@ -79,7 +80,7 @@ public class AuthController {
         @ApiResponse(responseCode = "404", description = "Usuario auth no encontrado")
     })
     @GetMapping("/usuarios/{id}")
-    public ResponseEntity<AuthUserResponseDTO> obtenerUsuario(@PathVariable Long id) {
+    public ResponseEntity<AuthUserResponseDTO> obtenerUsuario(@Parameter(description = "ID del usuario", example = "1") @PathVariable Long id) {
         log.info("GET /api/auth/usuarios/{}", id);
         return ResponseEntity.ok(authService.obtenerPorId(id));
     }
@@ -91,7 +92,7 @@ public class AuthController {
         @ApiResponse(responseCode = "404", description = "Usuario auth no encontrado")
     })
     @PatchMapping("/usuarios/{id}/rol")
-    public ResponseEntity<AuthUserResponseDTO> actualizarRol(@PathVariable Long id,
+    public ResponseEntity<AuthUserResponseDTO> actualizarRol(@Parameter(description = "ID del usuario", example = "1") @PathVariable Long id,
             @Valid @RequestBody RolRequestDTO request) {
         log.info("PATCH /api/auth/usuarios/{}/rol", id);
         return ResponseEntity.ok(authService.actualizarRol(id, request.getRol()));
@@ -103,7 +104,7 @@ public class AuthController {
         @ApiResponse(responseCode = "404", description = "Usuario auth no encontrado")
     })
     @PostMapping("/usuarios/{id}/estado")
-    public ResponseEntity<AuthUserResponseDTO> cambiarEstado(@PathVariable Long id) {
+    public ResponseEntity<AuthUserResponseDTO> cambiarEstado(@Parameter(description = "ID del usuario", example = "1") @PathVariable Long id) {
         log.info("POST /api/auth/usuarios/{}/estado", id);
         return ResponseEntity.ok(authService.cambiarEstado(id));
     }
