@@ -83,40 +83,40 @@ class CarritoServiceTest {
     }
 
     @Test
-    void obtenerCarritoById_deberiaRetornarCarrito() {
+    void obtenerCarritoPorId_deberiaRetornarCarrito() {
         when(carritoRepository.findById(1L)).thenReturn(Optional.of(testCarrito));
 
-        CarritoResponseDTO result = carritoService.obtenerCarritoById(1L);
+        CarritoResponseDTO result = carritoService.obtenerCarritoPorId(1L);
 
         assertNotNull(result);
         assertEquals(testCarrito.getUsuarioId(), result.getUsuarioId());
     }
 
     @Test
-    void obtenerCarritoById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerCarritoPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(carritoRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> carritoService.obtenerCarritoById(99L));
+        assertThrows(IllegalArgumentException.class, () -> carritoService.obtenerCarritoPorId(99L));
     }
 
     @Test
-    void obtenerCarritoActivoByUsuario_deberiaRetornarCarrito() {
+    void obtenerCarritoActivoPorUsuario_deberiaRetornarCarrito() {
         when(carritoRepository.findByUsuarioIdAndEstado(1L, "ACTIVO"))
                 .thenReturn(Optional.of(testCarrito));
 
-        CarritoResponseDTO result = carritoService.obtenerCarritoActivoByUsuario(1L);
+        CarritoResponseDTO result = carritoService.obtenerCarritoActivoPorUsuario(1L);
 
         assertNotNull(result);
         assertEquals(1L, result.getUsuarioId());
     }
 
     @Test
-    void obtenerCarritoActivoByUsuario_deberiaLanzarExcepcionCuandoNoHayActivo() {
+    void obtenerCarritoActivoPorUsuario_deberiaLanzarExcepcionCuandoNoHayActivo() {
         when(carritoRepository.findByUsuarioIdAndEstado(1L, "ACTIVO"))
                 .thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class,
-                () -> carritoService.obtenerCarritoActivoByUsuario(1L));
+                () -> carritoService.obtenerCarritoActivoPorUsuario(1L));
     }
 
     @Test

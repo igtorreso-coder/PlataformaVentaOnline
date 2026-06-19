@@ -13,8 +13,10 @@ import com.VentaOnline.CartService.dto.CarritoItemUpdateRequestDTO;
 import com.VentaOnline.CartService.dto.CarritoRequestDTO;
 import com.VentaOnline.CartService.dto.CarritoResponseDTO;
 import com.VentaOnline.CartService.service.CarritoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/carritos")
 @Tag(name = "Carrito de Compras", description = "Endpoints para gestión del carrito de compras")
@@ -30,6 +32,7 @@ public class CarritoController {
     })
     @PostMapping
     public ResponseEntity<CarritoResponseDTO> crearCarrito(@Valid @RequestBody CarritoRequestDTO request) {
+        log.info("POST /api/carritos - Creando carrito para usuario: {}", request.getUsuarioId());
         CarritoResponseDTO response = carritoService.crearCarrito(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -40,8 +43,9 @@ public class CarritoController {
         @ApiResponse(responseCode = "404", description = "Carrito no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<CarritoResponseDTO> obtenerCarritoById(@PathVariable Long id) {
-        CarritoResponseDTO response = carritoService.obtenerCarritoById(id);
+    public ResponseEntity<CarritoResponseDTO> obtenerCarritoPorId(@PathVariable Long id) {
+        log.info("GET /api/carritos/{} - Obteniendo carrito", id);
+        CarritoResponseDTO response = carritoService.obtenerCarritoPorId(id);
         return ResponseEntity.ok(response);
     }
 
@@ -51,8 +55,9 @@ public class CarritoController {
         @ApiResponse(responseCode = "404", description = "No hay carrito activo para el usuario")
     })
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<CarritoResponseDTO> obtenerCarritoActivoByUsuario(@PathVariable Long usuarioId) {
-        CarritoResponseDTO response = carritoService.obtenerCarritoActivoByUsuario(usuarioId);
+    public ResponseEntity<CarritoResponseDTO> obtenerCarritoActivoPorUsuario(@PathVariable Long usuarioId) {
+        log.info("GET /api/carritos/usuario/{} - Obteniendo carrito activo", usuarioId);
+        CarritoResponseDTO response = carritoService.obtenerCarritoActivoPorUsuario(usuarioId);
         return ResponseEntity.ok(response);
     }
 
@@ -66,6 +71,7 @@ public class CarritoController {
     public ResponseEntity<CarritoResponseDTO> agregarItem(
             @PathVariable Long id,
             @Valid @RequestBody CarritoItemRequestDTO request) {
+        log.info("POST /api/carritos/{}/items - Agregando producto {}", id, request.getProductoId());
         CarritoResponseDTO response = carritoService.agregarItem(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -81,6 +87,7 @@ public class CarritoController {
             @PathVariable Long id,
             @PathVariable Long itemId,
             @Valid @RequestBody CarritoItemUpdateRequestDTO request) {
+        log.info("PUT /api/carritos/{}/items/{} - Actualizando item", id, itemId);
         CarritoResponseDTO response = carritoService.actualizarItem(id, itemId, request);
         return ResponseEntity.ok(response);
     }
@@ -92,6 +99,7 @@ public class CarritoController {
     })
     @DeleteMapping("/{id}/items/{itemId}")
     public ResponseEntity<Void> eliminarItem(@PathVariable Long id, @PathVariable Long itemId) {
+        log.info("DELETE /api/carritos/{}/items/{} - Eliminando item", id, itemId);
         carritoService.eliminarItem(id, itemId);
         return ResponseEntity.noContent().build();
     }
@@ -103,6 +111,7 @@ public class CarritoController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarCarrito(@PathVariable Long id) {
+        log.info("DELETE /api/carritos/{} - Eliminando carrito", id);
         carritoService.eliminarCarrito(id);
         return ResponseEntity.noContent().build();
     }
@@ -115,6 +124,7 @@ public class CarritoController {
     })
     @PostMapping("/{id}/checkout")
     public ResponseEntity<CarritoResponseDTO> finalizarCarrito(@PathVariable Long id) {
+        log.info("POST /api/carritos/{}/checkout - Finalizando carrito", id);
         CarritoResponseDTO response = carritoService.finalizarCarrito(id);
         return ResponseEntity.ok(response);
     }

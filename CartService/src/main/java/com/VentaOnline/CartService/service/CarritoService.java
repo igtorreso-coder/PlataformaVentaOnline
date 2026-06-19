@@ -17,8 +17,10 @@ import com.VentaOnline.CartService.dto.CarritoResponseDTO;
 import com.VentaOnline.CartService.model.Carrito;
 import com.VentaOnline.CartService.model.CarritoItem;
 import com.VentaOnline.CartService.repository.CarritoRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 @Service
 public class CarritoService {
 
@@ -31,6 +33,7 @@ public class CarritoService {
 
     @Transactional
     public CarritoResponseDTO crearCarrito(CarritoRequestDTO request) {
+        log.info("Creando carrito para usuario: {}", request.getUsuarioId());
         usuarioClient.obtenerUsuario(request.getUsuarioId());
 
         Carrito carrito = Carrito.builder()
@@ -41,13 +44,17 @@ public class CarritoService {
         return toResponse(carrito);
     }
 
-    public CarritoResponseDTO obtenerCarritoById(Long id) {
+    @Transactional(readOnly = true)
+    public CarritoResponseDTO obtenerCarritoPorId(Long id) {
+        log.info("Obteniendo carrito por ID: {}", id);
         Carrito carrito = carritoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));
         return toResponse(carrito);
     }
 
-    public CarritoResponseDTO obtenerCarritoActivoByUsuario(Long usuarioId) {
+    @Transactional(readOnly = true)
+    public CarritoResponseDTO obtenerCarritoActivoPorUsuario(Long usuarioId) {
+        log.info("Obteniendo carrito activo para usuario: {}", usuarioId);
         Carrito carrito = carritoRepository.findByUsuarioIdAndEstado(usuarioId, "ACTIVO")
                 .orElseThrow(() -> new IllegalArgumentException("No hay carrito activo para el usuario: " + usuarioId));
         return toResponse(carrito);
@@ -55,6 +62,7 @@ public class CarritoService {
 
     @Transactional
     public CarritoResponseDTO agregarItem(Long carritoId, CarritoItemRequestDTO request) {
+        log.info("Agregando producto {} al carrito {}", request.getProductoId(), carritoId);
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
 
@@ -82,11 +90,13 @@ public class CarritoService {
         carrito.getItems().add(item);
         carrito.setUpdatedAt(LocalDateTime.now());
         carrito = carritoRepository.save(carrito);
+        log.info("Producto {} agregado al carrito {}", request.getProductoId(), carritoId);
         return toResponse(carrito);
     }
 
     @Transactional
     public CarritoResponseDTO actualizarItem(Long carritoId, Long itemId, CarritoItemUpdateRequestDTO request) {
+        log.info("Actualizando item {} del carrito {}", itemId, carritoId);
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
 
@@ -100,11 +110,13 @@ public class CarritoService {
 
         carrito.setUpdatedAt(LocalDateTime.now());
         carrito = carritoRepository.save(carrito);
+        log.info("Item {} del carrito {} actualizado", itemId, carritoId);
         return toResponse(carrito);
     }
 
     @Transactional
     public CarritoResponseDTO eliminarItem(Long carritoId, Long itemId) {
+        log.info("Eliminando item {} del carrito {}", itemId, carritoId);
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
 
@@ -116,18 +128,22 @@ public class CarritoService {
         carrito.getItems().remove(item);
         carrito.setUpdatedAt(LocalDateTime.now());
         carrito = carritoRepository.save(carrito);
+        log.info("Item {} eliminado del carrito {}", itemId, carritoId);
         return toResponse(carrito);
     }
 
     @Transactional
     public void eliminarCarrito(Long id) {
+        log.info("Eliminando carrito: {}", id);
         Carrito carrito = carritoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));
         carritoRepository.delete(carrito);
+        log.info("Carrito {} eliminado", id);
     }
 
     @Transactional
     public CarritoResponseDTO finalizarCarrito(Long id) {
+        log.info("Finalizando carrito: {}", id);
         Carrito carrito = carritoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + id));
 
@@ -138,6 +154,7 @@ public class CarritoService {
         carrito.setEstado("COMPLETADO");
         carrito.setUpdatedAt(LocalDateTime.now());
         carrito = carritoRepository.save(carrito);
+        log.info("Carrito {} finalizado", id);
         return toResponse(carrito);
     }
 
