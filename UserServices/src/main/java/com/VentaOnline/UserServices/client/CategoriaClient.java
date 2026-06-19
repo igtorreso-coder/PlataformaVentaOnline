@@ -15,7 +15,7 @@ public class CategoriaClient {
     @Autowired
     private RestClient categoriesRestClient;
 
-    public List<CategoriaDTO> getCategorias() {
+    public List<CategoriaDTO> obtenerCategorias() {
         log.info("Obteniendo categorias desde categories-service");
         try {
             return categoriesRestClient.get()
