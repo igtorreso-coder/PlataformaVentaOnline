@@ -1,0 +1,18 @@
+INSERT INTO inventarios (producto_id, tipo, cantidad, observacion, created_at, updated_at) VALUES
+(9, 'ENTRADA', 15, 'Stock inicial iPad Air', NOW(), NOW()),
+(10, 'ENTRADA', 25, 'Stock inicial Audífonos Sony', NOW(), NOW()),
+(11, 'ENTRADA', 60, 'Stock inicial Vestido Casual', NOW(), NOW()),
+(12, 'ENTRADA', 35, 'Stock inicial Chaqueta Invierno', NOW(), NOW()),
+(13, 'ENTRADA', 40, 'Stock inicial Lámpara LED', NOW(), NOW()),
+(14, 'ENTRADA', 80, 'Stock inicial Cojín Decorativo', NOW(), NOW()),
+(15, 'ENTRADA', 20, 'Stock inicial Pesas 10kg', NOW(), NOW()),
+(16, 'ENTRADA', 30, 'Stock inicial Tapete Yoga', NOW(), NOW()),
+(17, 'ENTRADA', 100, 'Stock inicial El Principito', NOW(), NOW()),
+(18, 'ENTRADA', 200, 'Stock inicial Cuaderno Profesional', NOW(), NOW()),
+(1, 'SALIDA', 1, 'Venta Pedido #1 - Laptop HP', NOW(), NOW()),
+(7, 'SALIDA', 1, 'Venta Pedido #1 - Balón Fútbol', NOW(), NOW()),
+(2, 'SALIDA', 1, 'Venta Pedido #2 - Samsung Galaxy', NOW(), NOW()),
+(1, 'SALIDA', 1, 'Venta Pedido #3 - Laptop HP', NOW(), NOW()),
+(10, 'SALIDA', 1, 'Venta Pedido #3 - Audífonos Sony', NOW(), NOW()),
+(5, 'SALIDA', 1, 'Venta Pedido #4 - Silla Ergonómica', NOW(), NOW()),
+(15, 'SALIDA', 2, 'Venta Pedido #4 - Pesas 10kg x2', NOW(), NOW());
