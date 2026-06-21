@@ -99,12 +99,12 @@ public class CarritoService {
     public CarritoResponseDTO actualizarItem(Long carritoId, Long itemId, CarritoItemUpdateRequestDTO request) {
         log.info("Actualizando item {} del carrito {}", itemId, carritoId);
         Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado con ID: " + carritoId));
 
         CarritoItem item = carrito.getItems().stream()
                 .filter(i -> i.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Item no encontrado con ID: " + itemId));
+                .orElseThrow(() -> new NoSuchElementException("Item no encontrado con ID: " + itemId));
 
         item.setCantidad(request.getCantidad());
         item.setSubtotal(item.getPrecioUnitario().multiply(BigDecimal.valueOf(request.getCantidad())));
