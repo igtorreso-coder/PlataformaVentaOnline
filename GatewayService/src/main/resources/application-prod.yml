@@ -2,46 +2,112 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: user-service-swagger
+          uri: http://user-service:8081
+          predicates:
+            - Path=/api/usuarios/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: user-service
           uri: http://user-service:8081
           predicates:
             - Path=/api/usuarios/**
+        - id: category-service-swagger
+          uri: http://category-service:8082
+          predicates:
+            - Path=/api/categorias/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: category-service
           uri: http://category-service:8082
           predicates:
             - Path=/api/categorias/**
+        - id: product-service-swagger
+          uri: http://product-service:8083
+          predicates:
+            - Path=/api/productos/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: product-service
           uri: http://product-service:8083
           predicates:
             - Path=/api/productos/**
+        - id: inventory-service-swagger
+          uri: http://inventory-service:8084
+          predicates:
+            - Path=/api/inventarios/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: inventory-service
           uri: http://inventory-service:8084
           predicates:
             - Path=/api/inventarios/**
+        - id: order-service-swagger
+          uri: http://order-service:8085
+          predicates:
+            - Path=/api/pedidos/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: order-service
           uri: http://order-service:8085
           predicates:
             - Path=/api/pedidos/**
+        - id: payment-service-swagger
+          uri: http://payment-service:8086
+          predicates:
+            - Path=/api/pagos/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: payment-service
           uri: http://payment-service:8086
           predicates:
             - Path=/api/pagos/**
+        - id: shipping-service-swagger
+          uri: http://shipping-service:8087
+          predicates:
+            - Path=/api/envios/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: shipping-service
           uri: http://shipping-service:8087
           predicates:
             - Path=/api/envios/**
+        - id: cart-service-swagger
+          uri: http://cart-service:8088
+          predicates:
+            - Path=/api/carritos/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: cart-service
           uri: http://cart-service:8088
           predicates:
             - Path=/api/carritos/**
+        - id: discount-service-swagger
+          uri: http://discount-service:8089
+          predicates:
+            - Path=/api/descuentos/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: discount-service
           uri: http://discount-service:8089
           predicates:
             - Path=/api/descuentos/**
+        - id: auth-service-swagger
+          uri: http://auth-service:8090
+          predicates:
+            - Path=/api/auth/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: auth-service
           uri: http://auth-service:8090
           predicates:
             - Path=/api/auth/**
+        - id: notification-service-swagger
+          uri: http://notification-service:8091
+          predicates:
+            - Path=/api/notificaciones/v3/api-docs/**
+          filters:
+            - StripPrefix=2
         - id: notification-service
           uri: http://notification-service:8091
           predicates:
