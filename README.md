@@ -78,26 +78,31 @@ El Gateway (`http://localhost:8080`) expone las siguientes rutas:
 | `/api/auth/**` | AuthService (`:8090`) |
 | `/api/notificaciones/**` | NotificationService (`:8091`) |
 
-## Documentación Swagger (Local)
+## Documentación Swagger Unificada (Gateway)
 
-Cada microservicio expone su documentación interactiva en:
+Todos los microservicios están centralizados en una **única interfaz Swagger** a través del Gateway:
 
-| Servicio | URL Swagger UI |
-|----------|---------------|
-| GatewayService | `http://localhost:8080/swagger-ui.html` |
-| UserServices | `http://localhost:8081/swagger-ui.html` |
-| CategoryService | `http://localhost:8082/swagger-ui.html` |
-| ProductService | `http://localhost:8083/swagger-ui.html` |
-| InventoryService | `http://localhost:8084/swagger-ui.html` |
-| OrderService | `http://localhost:8085/swagger-ui.html` |
-| PaymentService | `http://localhost:8086/swagger-ui.html` |
-| ShippingService | `http://localhost:8087/swagger-ui.html` |
-| CartService | `http://localhost:8088/swagger-ui.html` |
-| DiscountService | `http://localhost:8089/swagger-ui.html` |
-| AuthService | `http://localhost:8090/swagger-ui.html` |
-| NotificationService | `http://localhost:8091/swagger-ui.html` |
+```
+http://localhost:8080/swagger-ui.html
+```
 
-Alternativamente, los endpoints OpenAPI JSON están disponibles en `http://localhost:{puerto}/v3/api-docs`.
+Desde esta URL puedes explorar y probar los 12 servicios sin cambiar de pestaña:
+
+| Servicio | Pestaña en Swagger UI |
+|----------|----------------------|
+| UserServices | `Usuarios` |
+| CategoryService | `Categorias` |
+| ProductService | `Productos` |
+| InventoryService | `Inventario` |
+| OrderService | `Pedidos` |
+| PaymentService | `Pagos` |
+| ShippingService | `Envios` |
+| CartService | `Carritos` |
+| DiscountService | `Descuentos` |
+| AuthService | `Auth` |
+| NotificationService | `Notificaciones` |
+
+Cada servicio también expone su documentación individual en `http://localhost:{puerto}/swagger-ui.html` y su spec OpenAPI JSON en `http://localhost:{puerto}/v3/api-docs`.
 
 ## Requisitos para Ejecutar
 
