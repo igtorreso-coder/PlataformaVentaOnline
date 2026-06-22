@@ -98,13 +98,34 @@ class PedidoServiceTest {
         when(pedidoMapper.toEntity(requestDTO)).thenReturn(testPedido);
         when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(testPedido);
-        when(pedidoMapper.toResponse(any(Pedido.class), anyString())).thenReturn(responseDTO);
+        when(pedidoMapper.toResponse(any(Pedido.class), anyString(), anyMap()))
+                .thenReturn(responseDTO);
 
         PedidoResponseDTO result = pedidoService.crearPedido(requestDTO);
 
         assertNotNull(result);
         assertEquals(responseDTO.getTotal(), result.getTotal());
         verify(pedidoRepository).save(any(Pedido.class));
+    }
+
+    @Test
+    void crearPedido_deberiaLanzarExcepcionCuandoUsuarioNoExiste() {
+        when(usuarioClient.obtenerUsuarioPorId(1L))
+                .thenThrow(new RuntimeException("Usuario no encontrado con ID: 1"));
+
+        assertThrows(RuntimeException.class, () -> pedidoService.crearPedido(requestDTO));
+        verify(pedidoRepository, never()).save(any());
+    }
+
+    @Test
+    void crearPedido_deberiaLanzarExcepcionCuandoProductoNoExiste() {
+        when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
+        when(pedidoMapper.toEntity(requestDTO)).thenReturn(testPedido);
+        when(productoClient.obtenerProductoPorId(1L))
+                .thenThrow(new RuntimeException("Producto no encontrado con ID: 1"));
+
+        assertThrows(RuntimeException.class, () -> pedidoService.crearPedido(requestDTO));
+        verify(pedidoRepository, never()).save(any());
     }
 
     @Test
@@ -141,11 +162,38 @@ class PedidoServiceTest {
     }
 
     @Test
+    void obtenerPedidosPorUsuario_deberiaRetornarLista() {
+        when(pedidoRepository.findByUsuarioIdOrderByCreatedAtDesc(1L))
+                .thenReturn(List.of(testPedido));
+        when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
+        when(pedidoMapper.toResponse(any(Pedido.class), anyString(), anyMap()))
+                .thenReturn(responseDTO);
+
+        List<PedidoResponseDTO> result = pedidoService.obtenerPedidosPorUsuario(1L);
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void obtenerPedidosPorUsuario_deberiaRetornarListaVacia() {
+        when(pedidoRepository.findByUsuarioIdOrderByCreatedAtDesc(1L))
+                .thenReturn(List.of());
+        when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
+
+        List<PedidoResponseDTO> result = pedidoService.obtenerPedidosPorUsuario(1L);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void actualizarEstadoPedido_deberiaActualizarEstado() {
         when(pedidoRepository.findById(1L)).thenReturn(Optional.of(testPedido));
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(testPedido);
         when(usuarioClient.obtenerUsuarioPorId(1L)).thenReturn(usuarioResponse);
-        when(pedidoMapper.toResponse(any(Pedido.class), anyString())).thenReturn(responseDTO);
+        when(productoClient.obtenerProductoPorId(1L)).thenReturn(productoResponse);
+        when(pedidoMapper.toResponse(any(Pedido.class), anyString(), anyMap()))
+                .thenReturn(responseDTO);
 
         PedidoResponseDTO result = pedidoService.actualizarEstadoPedido(1L, "CONFIRMADO");
 
@@ -157,6 +205,15 @@ class PedidoServiceTest {
     void actualizarEstadoPedido_deberiaLanzarExcepcionCuandoEstadoInvalido() {
         assertThrows(IllegalArgumentException.class,
                 () -> pedidoService.actualizarEstadoPedido(1L, "INVALIDO"));
+        verify(pedidoRepository, never()).save(any());
+    }
+
+    @Test
+    void actualizarEstadoPedido_deberiaLanzarExcepcionCuandoPedidoNoExiste() {
+        when(pedidoRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class,
+                () -> pedidoService.actualizarEstadoPedido(99L, "CONFIRMADO"));
         verify(pedidoRepository, never()).save(any());
     }
 

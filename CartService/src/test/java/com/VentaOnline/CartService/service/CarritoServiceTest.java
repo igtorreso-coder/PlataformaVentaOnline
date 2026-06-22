@@ -84,6 +84,15 @@ class CarritoServiceTest {
     }
 
     @Test
+    void crearCarrito_deberiaLanzarExcepcionCuandoUsuarioNoExiste() {
+        when(usuarioClient.obtenerUsuario(1L))
+                .thenThrow(new RuntimeException("Usuario no encontrado con ID: 1"));
+
+        assertThrows(RuntimeException.class, () -> carritoService.crearCarrito(createRequest));
+        verify(carritoRepository, never()).save(any());
+    }
+
+    @Test
     void obtenerCarritoPorId_deberiaRetornarCarrito() {
         when(carritoRepository.findById(1L)).thenReturn(Optional.of(testCarrito));
 
@@ -153,6 +162,35 @@ class CarritoServiceTest {
     }
 
     @Test
+    void agregarItem_deberiaLanzarExcepcionCuandoCarritoNoEncontrado() {
+        CarritoItemRequestDTO itemRequest = CarritoItemRequestDTO.builder()
+                .productoId(1L)
+                .cantidad(2)
+                .build();
+
+        when(carritoRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class,
+                () -> carritoService.agregarItem(99L, itemRequest));
+        verify(carritoRepository, never()).save(any());
+    }
+
+    @Test
+    void agregarItem_deberiaManejarProductoNoEncontrado() {
+        CarritoItemRequestDTO itemRequest = CarritoItemRequestDTO.builder()
+                .productoId(99L)
+                .cantidad(2)
+                .build();
+
+        when(carritoRepository.findById(1L)).thenReturn(Optional.of(testCarrito));
+        when(productoClient.obtenerProducto(99L)).thenReturn(null);
+
+        assertThrows(NoSuchElementException.class,
+                () -> carritoService.agregarItem(1L, itemRequest));
+        verify(carritoRepository, never()).save(any());
+    }
+
+    @Test
     void finalizarCarrito_deberiaCambiarEstadoACompletado() {
         when(carritoRepository.findById(1L)).thenReturn(Optional.of(testCarrito));
         when(carritoRepository.save(any(Carrito.class))).thenReturn(testCarrito);
@@ -184,6 +222,14 @@ class CarritoServiceTest {
     }
 
     @Test
+    void eliminarCarrito_deberiaLanzarExcepcionCuandoNoExiste() {
+        when(carritoRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> carritoService.eliminarCarrito(99L));
+        verify(carritoRepository, never()).delete(any());
+    }
+
+    @Test
     void actualizarItem_deberiaActualizarCantidad() {
         testCarrito.getItems().add(testItem);
         CarritoItemUpdateRequestDTO updateRequest = CarritoItemUpdateRequestDTO.builder()
@@ -201,6 +247,19 @@ class CarritoServiceTest {
     }
 
     @Test
+    void actualizarItem_deberiaLanzarExcepcionCuandoItemNoExiste() {
+        CarritoItemUpdateRequestDTO updateRequest = CarritoItemUpdateRequestDTO.builder()
+                .cantidad(3)
+                .build();
+
+        when(carritoRepository.findById(1L)).thenReturn(Optional.of(testCarrito));
+
+        assertThrows(NoSuchElementException.class,
+                () -> carritoService.actualizarItem(1L, 99L, updateRequest));
+        verify(carritoRepository, never()).save(any());
+    }
+
+    @Test
     void eliminarItem_deberiaRemoverItem() {
         testCarrito.getItems().add(testItem);
         when(carritoRepository.findById(1L)).thenReturn(Optional.of(testCarrito));
@@ -211,5 +270,14 @@ class CarritoServiceTest {
         assertNotNull(result);
         assertTrue(testCarrito.getItems().isEmpty());
         verify(carritoRepository).save(any(Carrito.class));
+    }
+
+    @Test
+    void eliminarItem_deberiaLanzarExcepcionCuandoItemNoExiste() {
+        when(carritoRepository.findById(1L)).thenReturn(Optional.of(testCarrito));
+
+        assertThrows(NoSuchElementException.class,
+                () -> carritoService.eliminarItem(1L, 99L));
+        verify(carritoRepository, never()).save(any());
     }
 }
