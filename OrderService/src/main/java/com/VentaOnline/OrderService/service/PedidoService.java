@@ -1,6 +1,7 @@
 package com.VentaOnline.OrderService.service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -38,16 +39,18 @@ public class PedidoService {
         String nombreUsuario = getNombreUsuario(request.getUsuarioId());
         Pedido pedido = pedidoMapper.toEntity(request);
         BigDecimal total = BigDecimal.ZERO;
+        Map<Long, String> nombresProductos = new HashMap<>();
         for (PedidoDetalle detalle : pedido.getDetalles()) {
             ProductoResponse producto = productoClient.obtenerProductoPorId(detalle.getProductoId());
             detalle.setPrecioUnitario(producto.getPrecio());
             detalle.setSubtotal(producto.getPrecio().multiply(BigDecimal.valueOf(detalle.getCantidad())));
+            nombresProductos.put(detalle.getProductoId(), producto.getNombre());
             total = total.add(detalle.getSubtotal());
         }
         pedido.setTotal(total);
         pedido = pedidoRepository.save(pedido);
         log.info("Pedido creado con ID: {}, total: {}", pedido.getId(), pedido.getTotal());
-        return pedidoMapper.toResponse(pedido, nombreUsuario);
+        return pedidoMapper.toResponse(pedido, nombreUsuario, nombresProductos);
     }
 
     @Transactional(readOnly = true)
@@ -102,7 +105,8 @@ public class PedidoService {
         pedido.setEstado(nuevoEstado.toUpperCase());
         pedido = pedidoRepository.save(pedido);
         String nombreUsuario = getNombreUsuario(pedido.getUsuarioId());
-        return pedidoMapper.toResponse(pedido, nombreUsuario);
+        Map<Long, String> nombresProductos = getNombresProductos(pedido);
+        return pedidoMapper.toResponse(pedido, nombreUsuario, nombresProductos);
     }
 
     @Transactional
