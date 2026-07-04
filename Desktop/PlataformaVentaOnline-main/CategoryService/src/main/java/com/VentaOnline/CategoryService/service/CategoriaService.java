@@ -35,14 +35,14 @@ public class CategoriaService {
         return toResponse(categoria);
     }
 
-    public List<CategoriaResponseDTO> conseguirTodasCategorias() {
+    public List<CategoriaResponseDTO> obtenerTodasLasCategorias() {
         log.info("Obteniendo todas las categorías");
         return categoriaRepository.findAll().stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    public CategoriaResponseDTO buscarCategoriaById(Long id) {
+    public CategoriaResponseDTO buscarCategoriaPorId(Long id) {
         log.info("Obteniendo categoría con ID: {}", id);
         return categoriaRepository.findById(id)
                 .map(this::toResponse)
@@ -74,7 +74,7 @@ public class CategoriaService {
 
     public List<UsuarioDTO> obtenerUsuariosDelMicroservicio() {
         log.info("Consultando microservicio de usuarios");
-        return userClient.getUsers();
+        return userClient.obtenerUsuarios();
     }
 
     private CategoriaResponseDTO toResponse(Categoria categoria) {

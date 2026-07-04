@@ -1,94 +1,127 @@
 # PlataformaVentaOnline - Sistema de Gestión de E-commerce
 
 Autor y Único Participante: **Ignacio Torres**
+Bienvenidos a Plataforma de Venta Online, una solución integral de comercio electrónico diseñada para modernizar la gestión de ventas y logística mediante una arquitectura basada en microservicios.
 
-Bienvenidos a Plataforma de Venta Online, una solución integral de comercio electrónico diseñada para modernizar 
-la gestión de ventas y logística mediante una arquitectura basada en microservicios.
-
-En los sistemas tradicionales (monolitos), un fallo en el módulo de pagos puede hacer caer toda la plataforma, 
-impidiendo incluso que los usuarios vean el catálogo. Para solucionar este problema de escalabilidad y tolerancia a fallos, 
-este proyecto implementa una arquitectura distribuida utilizando Java + Spring Boot. Aquí, cada dominio del negocio opera de forma 
-independiente, asegurando que un alto volumen de ventas o despachos no afecte la experiencia general del cliente.
+En los sistemas tradicionales (monolitos), un fallo en el módulo de pagos puede hacer caer toda la plataforma, impidiendo incluso que los usuarios vean el catálogo. Para solucionar este problema de escalabilidad y tolerancia a fallos, este proyecto implementa una arquitectura distribuida utilizando Java + Spring Boot. Aquí, cada dominio del negocio opera de forma independiente, asegurando que un alto volumen de ventas o despachos no afecte la experiencia general del cliente.
 
 ## Propósito y Justificación de la Arquitectura
 
 El propósito central de este proyecto es demostrar la capacidad técnica para diseñar, construir y justificar una arquitectura distribuida basada en microservicios.
 
-Opté por este enfoque porque un E-commerce requiere manejar dominios de datos muy diferentes (un producto no tiene el mismo ciclo de vida que una factura o un envío). 
-Al separar la plataforma en 11 servicios independientes, se logró:
+Opté por este enfoque porque un E-commerce requiere manejar dominios de datos muy diferentes (un producto no tiene el mismo ciclo de vida que una factura o un envío). Al separar la plataforma en 12 servicios independientes, se logró:
 
-Aislamiento de Bases de Datos: Cada servicio gestiona sus propios datos, garantizando integridad y evitando bloqueos (locks) masivos en una única base central.
+- **Aislamiento de Bases de Datos**: Cada servicio gestiona sus propios datos, garantizando integridad y evitando bloqueos (locks) masivos en una única base central.
+- **Resiliencia**: Si el servicio de notificaciones falla, la venta se procesa de igual manera, manteniendo la operatividad crítica del negocio.
+- **Escalabilidad Horizontal**: En fechas de alta demanda, se pueden levantar más instancias del servicio de `Pedidos` sin necesidad de escalar servicios menos críticos como el de `Categorías`.
 
-Resiliencia: Si el servicio de notificaciones falla, la venta se procesa de igual manera, manteniendo la operatividad crítica del negocio.
+## Tecnologías Implementadas
 
-Escalabilidad Horizontal: En fechas de alta demanda, se pueden levantar más instancias del servicio de `Pedidos` sin necesidad de escalar servicios menos críticos como el de `Categorías`.
-
-## Criterios de Evaluación y Tecnologías Implementadas
-
-Para cumplir con los más altos estándares de desarrollo, se aplicaron las siguientes tecnologías y metodologías:
-- Persistencia (`JPA` + `Hibernate`): Cada microservicio posee su propio esquema relacional (MySQL), configurado en su respectivo `application.properties`. Las operaciones CRUD se realizan mediante `JpaRepository`.
-- Migraciones (Flyway): En lugar de crear tablas manualmente, se integró `Flyway`. Al iniciar cada aplicación, `Flyway` ejecuta automáticamente los scripts SQL (V1__create...sql) asegurando que la base de datos siempre esté sincronizada con el código.
-- Validación (Bean Validation - JSR 380): Los datos entrantes nunca tocan la lógica de negocio directamente. Se utilizan `DTOs` con anotaciones como `@NotNull` o `@Positive` para garantizar que la información sea correcta y segura desde el controlador.
-- Manejo Centralizado de Excepciones: Se implementó `@ControllerAdvice (GlobalExceptionHandler)` en cada servicio. Esto captura errores de validación o fallas de lógica y retorna al cliente un JSON estructurado y estandarizado con códigos HTTP correctos `(400, 404, 409)`.
-- Patrón CSR: El código sigue un flujo estricto y ordenado. El `Controller` recibe la petición REST, el `Service` ejecuta la regla de negocio y el `Repository` persiste el dato. Las responsabilidades no se mezclan.
-- Comunicación Síncrona con `RestClient`: Los servicios se comunican entre sí mediante `RestClient`, usado como reemplazo de `WebClient` por su menor complejidad de aprendizaje y su implementación más artesanal y fácil de aplicar.
-- Trazabilidad (SLF4J): Se registraron logs estructurados en las capas de servicio, permitiendo auditar el flujo de cada transacción, errores críticos y comunicaciones externas.
+- **Persistencia** (`JPA` + `Hibernate`): Cada microservicio posee su propio esquema relacional (MySQL), configurado en su respectivo `application.yml`. Las operaciones CRUD se realizan mediante `JpaRepository`.
+- **Migraciones** (`Flyway`): Al iniciar cada aplicación, Flyway ejecuta automáticamente los scripts SQL asegurando que la base de datos siempre esté sincronizada con el código.
+- **Validación** (Bean Validation - JSR 380): Se utilizan DTOs con anotaciones como `@NotNull` o `@Positive` para garantizar datos correctos desde el controlador.
+- **Manejo Centralizado de Excepciones**: `@ControllerAdvice` (GlobalExceptionHandler) en cada servicio, retornando JSON estructurado con códigos HTTP correctos (400, 404, 409, 422).
+- **Patrón CSR**: El Controller recibe la petición REST, el Service ejecuta la regla de negocio y el Repository persiste el dato.
+- **Comunicación Síncrona con `RestClient`**: Los servicios se comunican entre sí mediante RestClient con beans específicos por servicio.
+- **Documentación con Swagger/OpenAPI**: Cada microservicio expone su documentación interactiva vía springdoc-openapi.
+- **API Gateway** (Spring Cloud Gateway): Centraliza el enrutamiento hacia los 11 microservicios internos.
+- **Pruebas Unitarias**: JUnit 5 + Mockito con cobertura sobre la capa de servicio.
+- **Trazabilidad** (SLF4J): Logs estructurados en las capas de servicio para auditar cada transacción.
 
 ## Flujo de Negocio
+
 Para entender la integración de los microservicios, este es el viaje de un pedido en la plataforma:
+
 - El usuario se autentica (`AuthService`) y navega por el catálogo, filtrando artículos (`ProductService` y `CategoryService`).
 - El cliente añade productos a su sesión temporal (`CartService`).
 - Al proceder al pago, el carrito se envía al orquestador principal (`OrderService`).
-- OrderService realiza tres acciones vitales:
-- Valida y descuenta físicamente el stock en el `InventoryService`.
-- Si se ingresó un cupón, calcula el nuevo monto en el `DiscountService`.
-- Envía el monto final a la pasarela simulada (`PaymentService`).
-
-Si el pago es APROBADO, la orden se marca como confirmada, se genera la guía de despacho en `ShippingService` y se registra una alerta de éxito en `NotificationService`.
+- `OrderService` realiza tres acciones vitales:
+  - Valida y descuenta físicamente el stock en el `InventoryService`.
+  - Si se ingresó un cupón, calcula el nuevo monto en el `DiscountService`.
+  - Envía el monto final a la pasarela simulada (`PaymentService`).
+- Si el pago es APROBADO, la orden se marca como confirmada, se genera la guía de despacho en `ShippingService` y se registra una alerta de éxito en `NotificationService`.
 
 ## Composición del Sistema (Microservicios)
-El ecosistema E-commerce se compone de los siguientes 11 módulos independientes:
 
-- 1. `AuthService` (Seguridad y Accesos):
-  - Gestiona la emisión y validación de tokens de sesión para proteger los endpoints del sistema.
-- 2. `UserServices` (Gestión de Perfiles):
-  - Administra la información personal de los clientes registrados en la plataforma.
-- 3. `CategoryService` (Clasificación):
-  - Agrupa y categoriza el catálogo para facilitar la búsqueda de productos.
-- 4. `ProductService` (Catálogo Central)
-  - Expone el detalle de los artículos a la venta. Se comunica internamente con `CategoryService` para validar que el producto se asigne a una categoría existente.
-- 5. `InventoryService` (Control de Existencias)
-  - Componente Crítico: Mantiene el conteo exacto de stock
-- 6. `CartService` (Sesión de Compra)
-  - Almacena la intención temporal de compra del cliente. Su separación evita la saturación de la base de datos de pedidos definitivos con "carritos abandonados".
-- 7. `DiscountService` (Promociones)
-  - Evalúa códigos de descuento ingresados por el usuario, validando su vigencia y aplicando el porcentaje correspondiente.
-- 8. `OrderService` 
-  - El "cerebro" de la operación de venta. Recopila la información, crea el registro del pedido y coordina con Inventario y Pagos para finalizar la transacción de manera íntegra.
-- 9. `PaymentService` (Pasarela de Pagos)
-  - Recibe la solicitud de cobro del pedido y simula la aprobación o rechazo de la transacción financiera.
-- 10. `ShippingService` (Logística)
-  - Asume el control post-venta, encargándose de generar códigos de seguimiento y administrar los estados de despacho del paquete.
-- 11. `NotificationService` (Comunicaciones)
-  - Servicio que registra los eventos importantes (como la confirmación de una compra) emitiendo alertas para simular la comunicación con el cliente.
+El ecosistema se compone de los siguientes 12 módulos independientes:
+
+| # | Servicio | Puerto | Descripción |
+|---|----------|--------|-------------|
+| 1 | **GatewayService** | `8080` | API Gateway que centraliza y enruta todas las solicitudes a los microservicios internos |
+| 2 | **UserServices** | `8081` | Gestión de perfiles de clientes registrados |
+| 3 | **CategoryService** | `8082` | Clasificación y agrupación del catálogo de productos |
+| 4 | **ProductService** | `8083` | Catálogo central de productos; se comunica con CategoryService |
+| 5 | **InventoryService** | `8084` | Control de existencias y movimientos de stock |
+| 6 | **OrderService** | `8085` | Cerebro de la operación: orquesta pedidos, inventario, descuentos y pagos |
+| 7 | **PaymentService** | `8086` | Pasarela de pagos simulada |
+| 8 | **ShippingService** | `8087` | Logística post-venta: guías de despacho y seguimiento |
+| 9 | **CartService** | `8088` | Sesión temporal de compra del cliente |
+| 10 | **DiscountService** | `8089` | Promociones, cupones y validación de descuentos |
+| 11 | **AuthService** | `8090` | Autenticación, registro y emisión de tokens |
+| 12 | **NotificationService** | `8091` | Notificaciones y alertas de eventos del sistema |
+
+## Rutas del API Gateway
+
+El Gateway (`http://localhost:8080`) expone las siguientes rutas:
+
+| Ruta | Servicio Destino |
+|------|-----------------|
+| `/api/usuarios/**` | UserServices (`:8081`) |
+| `/api/categorias/**` | CategoryService (`:8082`) |
+| `/api/productos/**` | ProductService (`:8083`) |
+| `/api/inventarios/**` | InventoryService (`:8084`) |
+| `/api/pedidos/**` | OrderService (`:8085`) |
+| `/api/pagos/**` | PaymentService (`:8086`) |
+| `/api/envios/**` | ShippingService (`:8087`) |
+| `/api/carritos/**` | CartService (`:8088`) |
+| `/api/descuentos/**` | DiscountService (`:8089`) |
+| `/api/auth/**` | AuthService (`:8090`) |
+| `/api/notificaciones/**` | NotificationService (`:8091`) |
+
+## Documentación Swagger Unificada (Gateway)
+
+Todos los microservicios están centralizados en una **única interfaz Swagger** a través del Gateway:
+
+```
+http://localhost:8080/swagger-ui.html
+```
+
+Desde esta URL puedes explorar y probar los 12 servicios sin cambiar de pestaña:
+
+| Servicio | Pestaña en Swagger UI |
+|----------|----------------------|
+| UserServices | `Usuarios` |
+| CategoryService | `Categorias` |
+| ProductService | `Productos` |
+| InventoryService | `Inventario` |
+| OrderService | `Pedidos` |
+| PaymentService | `Pagos` |
+| ShippingService | `Envios` |
+| CartService | `Carritos` |
+| DiscountService | `Descuentos` |
+| AuthService | `Auth` |
+| NotificationService | `Notificaciones` |
+
+Cada servicio también expone su documentación individual en `http://localhost:{puerto}/swagger-ui.html` y su spec OpenAPI JSON en `http://localhost:{puerto}/v3/api-docs`.
 
 ## Requisitos para Ejecutar
 
 - Docker y Docker Compose instalados
 - Puerto `3307` libre (MySQL de Docker)
 - Git para clonar el repositorio
+- JDK 17+ (para ejecución local sin Docker)
 
-## Pasos para Ejecutar
+## Ejecución Local con Docker Compose
 
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/igtorreso-coder/PlataformaVentaOnline.git
 cd PlataformaVentaOnline
 
-# 2. Iniciar todos los servicios con Docker Compose
+# 2. Iniciar todos los servicios
 docker compose up -d
 
-# 3. Verificar que los 11 servicios estén levantados
+# 3. Verificar que los 12 servicios estén levantados
 docker compose ps
 
 # 4. Revisar logs de un servicio específico
@@ -98,92 +131,33 @@ docker compose logs -f order-service
 docker compose down
 ```
 
-La primera vez que se ejecuta, MySQL crea automáticamente las 11 bases de datos y Flyway aplica las migraciones en cada microservicio. Esperar aproximadamente 30-60 segundos hasta que todos los servicios estén listos.
+La primera vez, MySQL crea automáticamente las 12 bases de datos y Flyway aplica las migraciones. Esperar aproximadamente 30-60 segundos hasta que todos los servicios estén listos.
 
-Cada microservicio expone su API en `http://localhost:{puerto}`. Los puertos se asignan incrementalmente desde el `8081` (UserServices) hasta el `8091` (NotificationService).
 
-### Acceso a MySQL
-
-El MySQL de Laragon usa el puerto `3306`. El MySQL de Docker se expone en el puerto `3307` para no interferir. Para conectarse a la base de datos de Docker desde HeidiSQL (portable de Laragon):
+El MySQL de Docker se expone en el puerto `3307` para no interferir con instalaciones locales:
 
 - **Puerto:** `3307`
 - **Usuario:** `root`
 - **Contraseña:** `root`
 
-Así se pueden revisar las 11 bases de datos y sus tablas migradas por Flyway.
-
-## Puertos y Endpoints para Postman
-
-| Servicio | Puerto | Método | Endpoint | Descripción |
-|---|---|---|---|---|
-| **UserService** | 8081 | GET | `/api/usuarios` | Listar todos los usuarios |
-| | | GET | `/api/usuarios/{id}` | Obtener usuario por ID |
-| | | POST | `/api/usuarios` | Crear usuario |
-| | | PUT | `/api/usuarios/{id}` | Actualizar usuario |
-| | | DELETE | `/api/usuarios/{id}` | Eliminar usuario |
-| **CategoryService** | 8082 | GET | `/api/categorias` | Listar categorías |
-| | | GET | `/api/categorias/{id}` | Obtener categoría por ID |
-| | | POST | `/api/categorias` | Crear categoría |
-| | | PUT | `/api/categorias/{id}` | Actualizar categoría |
-| | | DELETE | `/api/categorias/{id}` | Eliminar categoría |
-| **ProductService** | 8083 | GET | `/api/productos` | Listar productos |
-| | | GET | `/api/productos/{id}` | Obtener producto por ID |
-| | | POST | `/api/productos` | Crear producto |
-| | | PUT | `/api/productos/{id}` | Actualizar producto |
-| | | DELETE | `/api/productos/{id}` | Eliminar producto |
-| **InventoryService** | 8084 | GET | `/api/inventarios` | Listar movimientos |
-| | | GET | `/api/inventarios/{id}` | Obtener movimiento |
-| | | POST | `/api/inventarios` | Crear movimiento (ENTRADA/SALIDA) |
-| | | GET | `/api/inventarios/stock/{productoId}` | Consultar stock de producto |
-| **OrderService** | 8085 | GET | `/api/pedidos` | Listar pedidos |
-| | | GET | `/api/pedidos/{id}` | Obtener pedido |
-| | | POST | `/api/pedidos` | Crear pedido |
-| | | PATCH | `/api/pedidos/{id}/estado` | Actualizar estado del pedido |
-| **PaymentService** | 8086 | GET | `/api/pagos` | Listar pagos |
-| | | GET | `/api/pagos/{id}` | Obtener pago |
-| | | POST | `/api/pagos` | Crear pago |
-| | | POST | `/api/pagos/{id}/procesar` | Procesar pago |
-| **ShippingService** | 8087 | GET | `/api/envios` | Listar envíos |
-| | | GET | `/api/envios/{id}` | Obtener envío |
-| | | POST | `/api/envios` | Crear envío |
-| | | POST | `/api/envios/{id}/enviar` | Marcar como enviado |
-| **CartService** | 8088 | POST | `/api/carritos` | Crear carrito |
-| | | GET | `/api/carritos/{id}` | Obtener carrito |
-| | | POST | `/api/carritos/{id}/items` | Agregar item al carrito |
-| | | POST | `/api/carritos/{id}/checkout` | Finalizar compra |
-| **DiscountService** | 8089 | GET | `/api/descuentos` | Listar cupones |
-| | | GET | `/api/descuentos/{id}` | Obtener cupón |
-| | | GET | `/api/descuentos/codigo/{codigo}` | Buscar cupón por código |
-| | | POST | `/api/descuentos` | Crear cupón |
-| | | POST | `/api/descuentos/{id}/validar` | Validar cupón |
-| | | POST | `/api/descuentos/{id}/usar` | Usar cupón |
-| **AuthService** | 8090 | POST | `/api/auth/registro` | Registrar usuario |
-| | | POST | `/api/auth/login` | Iniciar sesión |
-| | | GET | `/api/auth/validar?token=` | Validar token |
-| | | GET | `/api/auth/usuarios` | Listar usuarios auth |
-| | | GET | `/api/auth/usuarios/{id}` | Obtener usuario auth |
-| **NotificationService** | 8091 | GET | `/api/notificaciones` | Listar notificaciones |
-| | | GET | `/api/notificaciones/{id}` | Obtener notificación |
-| | | POST | `/api/notificaciones` | Crear notificación |
-| | | POST | `/api/notificaciones/{id}/enviar` | Enviar notificación |
 
 ### Datos de prueba disponibles
 
 Los siguientes datos se crean automáticamente al iniciar los servicios (vía Flyway):
 
 | Servicio | Registros |
-|---|---|
-| UserService | 3 usuarios: Ignacio Torres, Maria Garcia, Juan Perez |
-| AuthService | 3 cuentas con contraseña `123456` |
+|---|---|---|
+| UserService | 5 usuarios: Ignacio Torres, Maria Garcia, Juan Perez, Ana Lopez, Carlos Ruiz |
+| AuthService | 5 cuentas con contraseña `123456` |
 | CategoryService | 5 categorías: Electrónica, Ropa, Hogar, Deportes, Libros |
-| ProductService | 8 productos con precios desde $350 hasta $25,000 |
-| InventoryService | 8 movimientos de entrada (stock inicial) |
-| CartService | 2 carritos activos con items |
+| ProductService | 18 productos (8 originales + 10 nuevos: iPad Air, Audífonos Sony, Vestido, Chaqueta, Lámpara, Cojín, Pesas, Tapete Yoga, El Principito, Cuaderno) |
+| InventoryService | 27 movimientos (entradas iniciales + stock nuevos productos + salidas por ventas) |
+| CartService | 4 carritos: 2 activos (usuarios 1 y 3), 1 completado (usuario 1), items variados |
 | DiscountService | 4 cupones: BIENVENIDO, VERANO2025, ENVIOGRATIS, VIP10 |
-| OrderService | 2 pedidos (1 confirmado, 1 pendiente) |
-| PaymentService | 2 pagos (1 aprobado, 1 pendiente) |
-| ShippingService | 1 envío en tránsito |
-| NotificationService | 2 notificaciones |
+| OrderService | 4 pedidos (1 confirmado, 1 pendiente, 1 enviado, 1 entregado) |
+| PaymentService | 4 pagos (3 aprobados, 1 pendiente) |
+| ShippingService | 4 envíos (1 enviado, 1 pendiente, 1 enviado, 1 entregado) |
+| NotificationService | 5 notificaciones (3 enviadas, 2 pendientes) |
 
 ### Credenciales de prueba
 
@@ -192,4 +166,5 @@ Los siguientes datos se crean automáticamente al iniciar los servicios (vía Fl
 | `ignacio@email.com` | `123456` | ADMIN |
 | `maria@email.com` | `123456` | USER |
 | `juan@email.com` | `123456` | USER |
-
+| `ana@email.com` | `123456` | USER |
+| `carlos@email.com` | `123456` | USER |

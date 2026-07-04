@@ -1,0 +1,45 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes: []
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Usuarios
+        url: /api/usuarios/v3/api-docs
+      - name: Categorias
+        url: /api/categorias/v3/api-docs
+      - name: Productos
+        url: /api/productos/v3/api-docs
+      - name: Inventario
+        url: /api/inventarios/v3/api-docs
+      - name: Pedidos
+        url: /api/pedidos/v3/api-docs
+      - name: Pagos
+        url: /api/pagos/v3/api-docs
+      - name: Envios
+        url: /api/envios/v3/api-docs
+      - name: Carritos
+        url: /api/carritos/v3/api-docs
+      - name: Descuentos
+        url: /api/descuentos/v3/api-docs
+      - name: Auth
+        url: /api/auth/v3/api-docs
+      - name: Notificaciones
+        url: /api/notificaciones/v3/api-docs
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    com.VentaOnline.GatewayService: DEBUG

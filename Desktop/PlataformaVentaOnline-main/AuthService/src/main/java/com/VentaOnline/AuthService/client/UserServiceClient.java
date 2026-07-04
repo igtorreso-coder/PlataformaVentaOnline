@@ -3,7 +3,8 @@ package com.VentaOnline.AuthService.client;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -11,21 +12,23 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceClient {
 
     @Autowired
-    private RestClient usersRestClient;
+    private WebClient usersWebClient;
 
     public void sincronizarUsuario(Long id, String nombre, String correo) {
         log.info("Sincronizando usuario ID: {} con UserServices", id);
         try {
-            usersRestClient.post()
+            usersWebClient.post()
                     .uri("/api/usuarios")
-                    .body(Map.of(
+                    .bodyValue(Map.of(
                             "nombre", nombre,
                             "correo", correo
                     ))
                     .retrieve()
-                    .body(Void.class);
-        } catch (Exception e) {
-            log.warn("No se pudo sincronizar usuario con UserServices: {}", e.getMessage());
+                    .bodyToMono(Void.class)
+                    .block();
+        } catch (WebClientResponseException ex) {
+            log.error("Error al sincronizar usuario ID {} con UserServices: {}", id, ex.getMessage());
+            throw new RuntimeException("No se pudo sincronizar el usuario con el servicio de usuarios", ex);
         }
     }
 }

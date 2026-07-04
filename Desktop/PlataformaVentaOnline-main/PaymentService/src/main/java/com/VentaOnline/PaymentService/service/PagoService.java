@@ -28,7 +28,7 @@ public class PagoService {
         log.info("Creando pago para pedido ID: {}, monto: {}, método: {}",
                 request.getPedidoId(), request.getMonto(), request.getMetodoPago());
 
-        PedidoResponse pedido = pedidoClient.getPedidoById(request.getPedidoId());
+        PedidoResponse pedido = pedidoClient.obtenerPedidoPorId(request.getPedidoId());
 
         if (!"PENDIENTE".equalsIgnoreCase(pedido.getEstado())) {
             throw new IllegalArgumentException("El pedido ID " + request.getPedidoId()
@@ -54,7 +54,7 @@ public class PagoService {
     }
 
     @Transactional(readOnly = true)
-    public PagoResponseDTO obtenerPagoById(Long id) {
+    public PagoResponseDTO obtenerPagoPorId(Long id) {
         log.info("Obteniendo pago con ID: {}", id);
         return pagoRepository.findById(id)
                 .map(this::toResponse)
@@ -62,7 +62,7 @@ public class PagoService {
     }
 
     @Transactional(readOnly = true)
-    public List<PagoResponseDTO> obtenerPagosByPedido(Long pedidoId) {
+    public List<PagoResponseDTO> obtenerPagosPorPedido(Long pedidoId) {
         log.info("Obteniendo pagos para pedido ID: {}", pedidoId);
         return pagoRepository.findByPedidoIdOrderByCreatedAtDesc(pedidoId).stream()
                 .map(this::toResponse)

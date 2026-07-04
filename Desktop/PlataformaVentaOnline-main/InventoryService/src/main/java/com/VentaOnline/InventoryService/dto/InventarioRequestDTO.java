@@ -1,5 +1,6 @@
 package com.VentaOnline.InventoryService.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,27 +14,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Schema(description = "Solicitud para registrar un movimiento de inventario")
 public class InventarioRequestDTO {
-    // Producto al que se le registrara el movimiento de stock
+    @Schema(description = "ID del producto afectado", example = "1")
     @NotNull(message = "El ID del producto es obligatorio")
     private Long productoId;
 
-    /*
-     * Tipo de movimiento: "ENTRADA" (aumenta stock) o "SALIDA" (disminuye stock).
-     * Las salidas se usan cuando se confirma un pedido.
-     */
+    @Schema(description = "Tipo de movimiento: ENTRADA (aumenta stock) o SALIDA (disminuye stock)", example = "ENTRADA", allowableValues = {"ENTRADA", "SALIDA"})
     @NotBlank(message = "El tipo de movimiento es obligatorio")
     @Size(max = 20, message = "El tipo debe tener máximo 20 caracteres")
     private String tipo;
 
-    /*
-     * Cantidad de unidades afectadas en el movimiento.
-     * Siempre debe ser positiva; el signo (sumar o restar stock)
-     * lo determina el campo "tipo".
-     */
+    @Schema(description = "Cantidad de unidades afectadas (siempre positiva)", example = "10")
     @NotNull(message = "La cantidad es obligatoria")
     @Min(value = 1, message = "La cantidad debe ser mayor a 0")
     private Integer cantidad;
     
+    @Schema(description = "Observación opcional del movimiento", example = "Reabastecimiento semanal")
     private String observacion;
 }

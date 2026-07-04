@@ -67,7 +67,7 @@ class EnvioServiceTest {
 
     @Test
     void crearEnvio_deberiaCrearYRetornar() {
-        when(pedidoClient.getPedidoById(1L)).thenReturn(pedidoResponse);
+        when(pedidoClient.obtenerPedidoPorId(1L)).thenReturn(pedidoResponse);
         when(envioRepository.save(any(Envio.class))).thenReturn(testEnvio);
 
         EnvioResponseDTO result = envioService.crearEnvio(requestDTO);
@@ -81,7 +81,7 @@ class EnvioServiceTest {
     @Test
     void crearEnvio_deberiaLanzarExcepcionCuandoPedidoNoEstaConfirmado() {
         pedidoResponse.setEstado("PENDIENTE");
-        when(pedidoClient.getPedidoById(1L)).thenReturn(pedidoResponse);
+        when(pedidoClient.obtenerPedidoPorId(1L)).thenReturn(pedidoResponse);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> envioService.crearEnvio(requestDTO));
@@ -99,20 +99,20 @@ class EnvioServiceTest {
     }
 
     @Test
-    void obtenerEnvioById_deberiaRetornarEnvio() {
+    void obtenerEnvioPorId_deberiaRetornarEnvio() {
         when(envioRepository.findById(1L)).thenReturn(Optional.of(testEnvio));
 
-        EnvioResponseDTO result = envioService.obtenerEnvioById(1L);
+        EnvioResponseDTO result = envioService.obtenerEnvioPorId(1L);
 
         assertNotNull(result);
         assertEquals(testEnvio.getDireccion(), result.getDireccion());
     }
 
     @Test
-    void obtenerEnvioById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerEnvioPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(envioRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> envioService.obtenerEnvioById(99L));
+        assertThrows(NoSuchElementException.class, () -> envioService.obtenerEnvioPorId(99L));
     }
 
     @Test

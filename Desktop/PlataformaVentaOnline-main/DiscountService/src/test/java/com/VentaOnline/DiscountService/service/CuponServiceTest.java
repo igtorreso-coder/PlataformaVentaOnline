@@ -137,37 +137,37 @@ class CuponServiceTest {
     }
 
     @Test
-    void obtenerCuponById_deberiaRetornarCupon() {
+    void obtenerCuponPorId_deberiaRetornarCupon() {
         when(cuponRepository.findById(1L)).thenReturn(Optional.of(cuponActivo));
 
-        CuponResponseDTO result = cuponService.obtenerCuponById(1L);
+        CuponResponseDTO result = cuponService.obtenerCuponPorId(1L);
 
         assertNotNull(result);
         assertEquals("DESC10", result.getCodigo());
     }
 
     @Test
-    void obtenerCuponById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerCuponPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(cuponRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> cuponService.obtenerCuponById(99L));
+        assertThrows(NoSuchElementException.class, () -> cuponService.obtenerCuponPorId(99L));
     }
 
     @Test
-    void obtenerCuponByCodigo_deberiaRetornarCupon() {
+    void obtenerCuponPorCodigo_deberiaRetornarCupon() {
         when(cuponRepository.findByCodigo("DESC10")).thenReturn(Optional.of(cuponActivo));
 
-        CuponResponseDTO result = cuponService.obtenerCuponByCodigo("DESC10");
+        CuponResponseDTO result = cuponService.obtenerCuponPorCodigo("DESC10");
 
         assertNotNull(result);
         assertEquals("DESC10", result.getCodigo());
     }
 
     @Test
-    void obtenerCuponByCodigo_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerCuponPorCodigo_deberiaLanzarExcepcionCuandoNoExiste() {
         when(cuponRepository.findByCodigo("NOEXISTE")).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> cuponService.obtenerCuponByCodigo("NOEXISTE"));
+        assertThrows(NoSuchElementException.class, () -> cuponService.obtenerCuponPorCodigo("NOEXISTE"));
     }
 
     @Test

@@ -50,14 +50,14 @@ public class CuponService {
                 .toList();
     }
 
-    public CuponResponseDTO obtenerCuponById(Long id) {
+    public CuponResponseDTO obtenerCuponPorId(Long id) {
         log.info("Obteniendo cupón con ID: {}", id);
         return cuponRepository.findById(id)
                 .map(this::toResponse)
                 .orElseThrow(() -> new NoSuchElementException("Cupón no encontrado con ID: " + id));
     }
 
-    public CuponResponseDTO obtenerCuponByCodigo(String codigo) {
+    public CuponResponseDTO obtenerCuponPorCodigo(String codigo) {
         log.info("Obteniendo cupón por código: {}", codigo);
         return cuponRepository.findByCodigo(codigo.toUpperCase())
                 .map(this::toResponse)

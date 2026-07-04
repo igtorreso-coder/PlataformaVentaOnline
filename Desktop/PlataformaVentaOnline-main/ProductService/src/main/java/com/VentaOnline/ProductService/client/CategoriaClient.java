@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import com.VentaOnline.ProductService.dto.CategoriaResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,16 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CategoriaClient {
     @Autowired
-    private RestClient categoriesRestClient;
+    private WebClient categoriesWebClient;
 
-    public CategoriaResponse getCategoriaById(Long categoriaId) {
+    public CategoriaResponse obtenerCategoriaPorId(Long categoriaId) {
         log.info("Obteniendo categoria con ID: {}", categoriaId);
         try {
-            return categoriesRestClient.get()
+            return categoriesWebClient.get()
                     .uri("/api/categorias/{categoriaId}", categoriaId)
                     .retrieve()
-                    .body(CategoriaResponse.class);
-        } catch (HttpClientErrorException ex) {
+                    .bodyToMono(CategoriaResponse.class)
+                    .block();
+        } catch (WebClientResponseException ex) {
             log.error("Error al obtener categoria con ID {}: {}", categoriaId, ex.getMessage());
             switch (ex.getStatusCode().value()) {
                 case 404 -> throw new RuntimeException("Categoria no encontrada con ID: " + categoriaId);
@@ -31,14 +32,15 @@ public class CategoriaClient {
         }
     }
 
-    public List<CategoriaResponse> getCategorias() {
+    public List<CategoriaResponse> obtenerCategorias() {
         log.info("Obteniendo todas las categorias");
         try {
-            return categoriesRestClient.get()
+            return categoriesWebClient.get()
                     .uri("/api/categorias")
                     .retrieve()
-                    .body(new ParameterizedTypeReference<List<CategoriaResponse>>() {});
-        } catch (HttpClientErrorException ex) {
+                    .bodyToMono(new ParameterizedTypeReference<List<CategoriaResponse>>() {})
+                    .block();
+        } catch (WebClientResponseException ex) {
             log.error("Error al obtener categorias: {}", ex.getMessage());
             throw new RuntimeException("Error al obtener categorias del microservicio", ex);
         }

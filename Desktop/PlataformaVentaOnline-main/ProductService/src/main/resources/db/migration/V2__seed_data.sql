@@ -6,4 +6,14 @@ INSERT INTO productos (id, nombre, descripcion, precio, categoria_id, stock, cre
 (5, 'Silla Ergonómica', 'Silla de oficina ergonómica ajustable', 4500.00, 3, 15, NOW(), NOW()),
 (6, 'Bicicleta Montaña', 'Bicicleta de montaña 21 velocidades', 8500.00, 4, 5, NOW(), NOW()),
 (7, 'Balón Fútbol', 'Balón de fútbol profesional talla 5', 1200.00, 4, 30, NOW(), NOW()),
-(8, 'Programación Java', 'Aprende Java desde cero - 3ra edición', 650.00, 5, 40, NOW(), NOW());
+(8, 'Programación Java', 'Aprende Java desde cero - 3ra edición', 650.00, 5, 40, NOW(), NOW()),
+(9, 'iPad Air 5', 'iPad Air 5 10.9" 64GB WiFi', 12000.00, 1, 15, NOW(), NOW()),
+(10, 'Audífonos Sony WH-1000XM5', 'Audífonos inalámbricos con cancelación de ruido', 2500.00, 1, 25, NOW(), NOW()),
+(11, 'Vestido Casual', 'Vestido casual manga corta estampado floral', 750.00, 2, 60, NOW(), NOW()),
+(12, 'Chaqueta Invierno', 'Chaqueta térmica para invierno color negro', 1200.00, 2, 35, NOW(), NOW()),
+(13, 'Lámpara LED', 'Lámpara de escritorio LED ajustable 3 niveles', 600.00, 3, 40, NOW(), NOW()),
+(14, 'Cojín Decorativo', 'Cojín decorativo 45x45 cm', 250.00, 3, 80, NOW(), NOW()),
+(15, 'Pesas 10kg', 'Par de pesas 10kg cada una', 800.00, 4, 20, NOW(), NOW()),
+(16, 'Tapete Yoga', 'Tapete de yoga antideslizante 180cm', 450.00, 4, 30, NOW(), NOW()),
+(17, 'El Principito', 'El Principito - Antoine de Saint-Exupéry', 180.00, 5, 100, NOW(), NOW()),
+(18, 'Cuaderno Profesional', 'Cuaderno profesional pasta dura 200 hojas', 120.00, 5, 200, NOW(), NOW());

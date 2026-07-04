@@ -2,8 +2,8 @@ package com.VentaOnline.ShippingService.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import com.VentaOnline.ShippingService.dto.PedidoResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,16 +12,17 @@ import lombok.extern.slf4j.Slf4j;
 public class PedidoClient {
 
     @Autowired
-    private RestClient ordersRestClient;
+    private WebClient ordersWebClient;
 
-    public PedidoResponse getPedidoById(Long pedidoId) {
+    public PedidoResponse obtenerPedidoPorId(Long pedidoId) {
         log.info("Obteniendo pedido con ID: {}", pedidoId);
         try {
-            return ordersRestClient.get()
+            return ordersWebClient.get()
                     .uri("/api/pedidos/{pedidoId}", pedidoId)
                     .retrieve()
-                    .body(PedidoResponse.class);
-        } catch (HttpClientErrorException ex) {
+                    .bodyToMono(PedidoResponse.class)
+                    .block();
+        } catch (WebClientResponseException ex) {
             log.error("Error al obtener pedido con ID {}: {}", pedidoId, ex.getMessage());
             switch (ex.getStatusCode().value()) {
                 case 404 -> throw new RuntimeException("Pedido no encontrado con ID: " + pedidoId);

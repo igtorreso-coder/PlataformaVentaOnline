@@ -62,7 +62,7 @@ class ProductoServiceTest {
 
     @Test
     void crearProducto_deberiaCrearYRetornar() {
-        when(categoriaClient.getCategoriaById(1L)).thenReturn(categoriaResponse);
+        when(categoriaClient.obtenerCategoriaPorId(1L)).thenReturn(categoriaResponse);
         when(productoRepository.save(any(Producto.class))).thenReturn(testProducto);
 
         ProductoResponseDTO result = productoService.crearProducto(requestDTO);
@@ -76,7 +76,7 @@ class ProductoServiceTest {
     @Test
     void obtenerTodosProductos_deberiaRetornarLista() {
         when(productoRepository.findAll()).thenReturn(List.of(testProducto));
-        when(categoriaClient.getCategoriaById(1L)).thenReturn(categoriaResponse);
+        when(categoriaClient.obtenerCategoriaPorId(1L)).thenReturn(categoriaResponse);
 
         List<ProductoResponseDTO> result = productoService.obtenerTodosProductos();
 
@@ -85,29 +85,29 @@ class ProductoServiceTest {
     }
 
     @Test
-    void obtenerProductoById_deberiaRetornarProducto() {
+    void obtenerProductoPorId_deberiaRetornarProducto() {
         when(productoRepository.findById(1L)).thenReturn(Optional.of(testProducto));
-        when(categoriaClient.getCategoriaById(1L)).thenReturn(categoriaResponse);
+        when(categoriaClient.obtenerCategoriaPorId(1L)).thenReturn(categoriaResponse);
 
-        ProductoResponseDTO result = productoService.obtenerProductoById(1L);
+        ProductoResponseDTO result = productoService.obtenerProductoPorId(1L);
 
         assertNotNull(result);
         assertEquals(testProducto.getNombre(), result.getNombre());
     }
 
     @Test
-    void obtenerProductoById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerProductoPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(productoRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> productoService.obtenerProductoById(99L));
+        assertThrows(NoSuchElementException.class, () -> productoService.obtenerProductoPorId(99L));
     }
 
     @Test
-    void obtenerProductosByCategoria_deberiaRetornarLista() {
+    void obtenerProductosPorCategoria_deberiaRetornarLista() {
         when(productoRepository.findByCategoriaId(1L)).thenReturn(List.of(testProducto));
-        when(categoriaClient.getCategoriaById(1L)).thenReturn(categoriaResponse);
+        when(categoriaClient.obtenerCategoriaPorId(1L)).thenReturn(categoriaResponse);
 
-        List<ProductoResponseDTO> result = productoService.obtenerProductosByCategoria(1L);
+        List<ProductoResponseDTO> result = productoService.obtenerProductosPorCategoria(1L);
 
         assertEquals(1, result.size());
     }
@@ -115,7 +115,7 @@ class ProductoServiceTest {
     @Test
     void actualizarProducto_deberiaActualizarCorrectamente() {
         when(productoRepository.findById(1L)).thenReturn(Optional.of(testProducto));
-        when(categoriaClient.getCategoriaById(1L)).thenReturn(categoriaResponse);
+        when(categoriaClient.obtenerCategoriaPorId(1L)).thenReturn(categoriaResponse);
         when(productoRepository.save(any(Producto.class))).thenReturn(testProducto);
 
         ProductoResponseDTO result = productoService.actualizarProducto(1L, requestDTO);

@@ -42,7 +42,7 @@ public class UsuarioService {
                 .toList();
     }
 
-    public UsuarioResponseDTO obtenerUsuarioById(Long id) {
+    public UsuarioResponseDTO obtenerUsuarioPorId(Long id) {
         log.info("Obteniendo usuario con ID: {}", id);
         return usuarioRepository.findById(id)
                 .map(this::toResponse)
@@ -74,7 +74,7 @@ public class UsuarioService {
 
     public List<CategoriaDTO> obtenerCategorias() {
         log.info("Consultando microservicio de categorías");
-        return categoriaClient.getCategorias();
+        return categoriaClient.obtenerCategorias();
     }
 
     private UsuarioResponseDTO toResponse(Usuario usuario) {

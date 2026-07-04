@@ -2,8 +2,8 @@ package com.VentaOnline.OrderService.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import com.VentaOnline.OrderService.dto.UsuarioResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,16 +11,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UsuarioClient {
     @Autowired
-    private RestClient usersRestClient;
+    private WebClient usersWebClient;
 
-    public UsuarioResponse getUsuarioById(Long usuarioId) {
+    public UsuarioResponse obtenerUsuarioPorId(Long usuarioId) {
         log.info("Obteniendo usuario con ID: {}", usuarioId);
         try {
-            return usersRestClient.get()
+            return usersWebClient.get()
                     .uri("/api/usuarios/{usuarioId}", usuarioId)
                     .retrieve()
-                    .body(UsuarioResponse.class);
-        } catch (HttpClientErrorException ex) {
+                    .bodyToMono(UsuarioResponse.class)
+                    .block();
+        } catch (WebClientResponseException ex) {
             log.error("Error al obtener usuario con ID {}: {}", usuarioId, ex.getMessage());
             switch (ex.getStatusCode().value()) {
                 case 404 -> throw new RuntimeException("Usuario no encontrado con ID: " + usuarioId);

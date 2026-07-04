@@ -102,7 +102,7 @@ public class AuthService {
                 .toList();
     }
 
-    public AuthUserResponseDTO obtenerById(Long id) {
+    public AuthUserResponseDTO obtenerPorId(Long id) {
         log.info("Obteniendo usuario auth con ID: {}", id);
         return authUserRepository.findById(id)
                 .map(this::toResponse)

@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import com.VentaOnline.CategoryService.dto.UsuarioDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,16 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserClient {
     @Autowired
-    private RestClient usersRestClient;
+    private WebClient usersWebClient;
 
-    public List<UsuarioDTO> getUsers() {
+    public List<UsuarioDTO> obtenerUsuarios() {
         log.info("Obteniendo usuarios desde users-service");
         try {
-            return usersRestClient.get()
+            return usersWebClient.get()
                     .uri("/api/usuarios")
                     .retrieve()
-                    .body(new ParameterizedTypeReference<List<UsuarioDTO>>() {});
-        } catch (HttpClientErrorException ex) {
+                    .bodyToMono(new ParameterizedTypeReference<List<UsuarioDTO>>() {})
+                    .block();
+        } catch (WebClientResponseException ex) {
             log.error("Error al obtener usuarios: {}", ex.getMessage());
             throw new RuntimeException("Error al obtener usuarios del microservicio", ex);
         }

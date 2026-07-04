@@ -1,6 +1,5 @@
 package com.VentaOnline.UserServices.service;
 
-import com.VentaOnline.UserServices.client.CategoriaClient;
 import com.VentaOnline.UserServices.dto.UsuarioRequestDTO;
 import com.VentaOnline.UserServices.dto.UsuarioResponseDTO;
 import com.VentaOnline.UserServices.model.Usuario;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,14 +20,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class UsuarioServiceTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
-
-    @Mock
-    private CategoriaClient categoriaClient;
 
     @InjectMocks
     private UsuarioService usuarioService;
@@ -86,20 +79,20 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void obtenerUsuarioById_deberiaRetornarUsuario() {
+    void obtenerUsuarioPorId_deberiaRetornarUsuario() {
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(testUser));
 
-        UsuarioResponseDTO result = usuarioService.obtenerUsuarioById(1L);
+        UsuarioResponseDTO result = usuarioService.obtenerUsuarioPorId(1L);
 
         assertNotNull(result);
         assertEquals(testUser.getNombreCompleto(), result.getNombreCompleto());
     }
 
     @Test
-    void obtenerUsuarioById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerUsuarioPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(usuarioRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> usuarioService.obtenerUsuarioById(99L));
+        assertThrows(NoSuchElementException.class, () -> usuarioService.obtenerUsuarioPorId(99L));
     }
 
     @Test

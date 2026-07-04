@@ -59,7 +59,7 @@ class PagoServiceTest {
 
     @Test
     void crearPago_deberiaCrearYRetornar() {
-        when(pedidoClient.getPedidoById(1L)).thenReturn(pedidoResponse);
+        when(pedidoClient.obtenerPedidoPorId(1L)).thenReturn(pedidoResponse);
         when(pagoRepository.save(any(Pago.class))).thenReturn(testPago);
 
         PagoResponseDTO result = pagoService.crearPago(requestDTO);
@@ -73,7 +73,7 @@ class PagoServiceTest {
     @Test
     void crearPago_deberiaLanzarExcepcionCuandoPedidoNoEstaPendiente() {
         pedidoResponse.setEstado("CONFIRMADO");
-        when(pedidoClient.getPedidoById(1L)).thenReturn(pedidoResponse);
+        when(pedidoClient.obtenerPedidoPorId(1L)).thenReturn(pedidoResponse);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> pagoService.crearPago(requestDTO));
@@ -91,20 +91,20 @@ class PagoServiceTest {
     }
 
     @Test
-    void obtenerPagoById_deberiaRetornarPago() {
+    void obtenerPagoPorId_deberiaRetornarPago() {
         when(pagoRepository.findById(1L)).thenReturn(Optional.of(testPago));
 
-        PagoResponseDTO result = pagoService.obtenerPagoById(1L);
+        PagoResponseDTO result = pagoService.obtenerPagoPorId(1L);
 
         assertNotNull(result);
         assertEquals(testPago.getMonto(), result.getMonto());
     }
 
     @Test
-    void obtenerPagoById_deberiaLanzarExcepcionCuandoNoExiste() {
+    void obtenerPagoPorId_deberiaLanzarExcepcionCuandoNoExiste() {
         when(pagoRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> pagoService.obtenerPagoById(99L));
+        assertThrows(NoSuchElementException.class, () -> pagoService.obtenerPagoPorId(99L));
     }
 
     @Test

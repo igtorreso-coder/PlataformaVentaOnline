@@ -2,8 +2,8 @@ package com.VentaOnline.OrderService.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import com.VentaOnline.OrderService.dto.ProductoResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,16 +11,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductoClient {
     @Autowired
-    private RestClient productsRestClient;
+    private WebClient productsWebClient;
 
-    public ProductoResponse getProductoById(Long productoId) {
+    public ProductoResponse obtenerProductoPorId(Long productoId) {
         log.info("Obteniendo producto con ID: {}", productoId);
         try {
-            return productsRestClient.get()
+            return productsWebClient.get()
                     .uri("/api/productos/{productoId}", productoId)
                     .retrieve()
-                    .body(ProductoResponse.class);
-        } catch (HttpClientErrorException ex) {
+                    .bodyToMono(ProductoResponse.class)
+                    .block();
+        } catch (WebClientResponseException ex) {
             log.error("Error al obtener producto con ID {}: {}", productoId, ex.getMessage());
             switch (ex.getStatusCode().value()) {
                 case 404 -> throw new RuntimeException("Producto no encontrado con ID: " + productoId);

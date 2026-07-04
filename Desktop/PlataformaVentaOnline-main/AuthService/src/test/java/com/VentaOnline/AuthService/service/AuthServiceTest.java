@@ -178,7 +178,7 @@ class AuthServiceTest {
     void obtenerById_deberiaRetornarUsuario() {
         when(authUserRepository.findById(1L)).thenReturn(Optional.of(testUser));
 
-        AuthUserResponseDTO result = authService.obtenerById(1L);
+        AuthUserResponseDTO result = authService.obtenerPorId(1L);
 
         assertNotNull(result);
         assertEquals(testUser.getCorreo(), result.getCorreo());
@@ -188,7 +188,7 @@ class AuthServiceTest {
     void obtenerById_deberiaLanzarExcepcionCuandoNoExiste() {
         when(authUserRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> authService.obtenerById(99L));
+        assertThrows(NoSuchElementException.class, () -> authService.obtenerPorId(99L));
     }
 
     @Test

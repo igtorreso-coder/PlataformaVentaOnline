@@ -2,8 +2,8 @@ package com.VentaOnline.NotificationService.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -11,16 +11,17 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceClient {
 
     @Autowired
-    private RestClient usersRestClient;
+    private WebClient usersWebClient;
 
     public void obtenerUsuario(Long usuarioId) {
         log.info("Verificando usuario ID: {}", usuarioId);
         try {
-            usersRestClient.get()
+            usersWebClient.get()
                     .uri("/api/usuarios/{usuarioId}", usuarioId)
                     .retrieve()
-                    .body(Void.class);
-        } catch (HttpClientErrorException ex) {
+                    .bodyToMono(Void.class)
+                    .block();
+        } catch (WebClientResponseException ex) {
             log.error("Error al verificar usuario ID {}: {}", usuarioId, ex.getMessage());
             switch (ex.getStatusCode().value()) {
                 case 404 -> throw new RuntimeException("Usuario no encontrado con ID: " + usuarioId);

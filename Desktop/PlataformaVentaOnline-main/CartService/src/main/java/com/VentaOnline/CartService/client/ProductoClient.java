@@ -1,32 +1,33 @@
 package com.VentaOnline.CartService.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import com.VentaOnline.CartService.dto.ProductoResponse;
-import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class ProductoClient {
 
     @Autowired
-    private RestClient restClient;
-
-    @Value("${servicios.productos.url}")
-    private String productosUrl;
-
-    private RestClient productosRestClient;
-
-    @PostConstruct
-    public void init() {
-        this.productosRestClient = this.restClient.mutate().baseUrl(this.productosUrl).build();
-    }
+    private WebClient productosWebClient;
 
     public ProductoResponse obtenerProducto(Long id) {
-        return productosRestClient.get()
-                .uri("/api/productos/{id}", id)
-                .retrieve()
-                .body(ProductoResponse.class);
+        log.info("Obteniendo producto con ID: {}", id);
+        try {
+            return productosWebClient.get()
+                    .uri("/api/productos/{id}", id)
+                    .retrieve()
+                    .bodyToMono(ProductoResponse.class)
+                    .block();
+        } catch (WebClientResponseException ex) {
+            log.error("Error al obtener producto con ID {}: {}", id, ex.getMessage());
+            if (ex.getStatusCode().value() == 404) {
+                throw new RuntimeException("Producto no encontrado con ID: " + id);
+            }
+            throw new RuntimeException("Error al obtener producto con ID: " + id, ex);
+        }
     }
 }

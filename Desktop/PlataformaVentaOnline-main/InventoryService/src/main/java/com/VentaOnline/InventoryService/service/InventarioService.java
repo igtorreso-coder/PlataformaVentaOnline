@@ -28,14 +28,14 @@ public class InventarioService {
                 .toList();
     }
 
-    public InventarioResponseDTO obtenerMovimientoById(Long id) {
+    public InventarioResponseDTO obtenerMovimientoPorId(Long id) {
         log.info("Obteniendo movimiento de inventario con ID: {}", id);
         return inventarioRepository.findById(id)
                 .map(mov -> toResponse(mov, obtenerNombreProducto(mov.getProductoId())))
                 .orElseThrow(() -> new NoSuchElementException("Movimiento de inventario no encontrado con ID: " + id));
     }
 
-    public List<InventarioResponseDTO> obtenerMovimientosByProducto(Long productoId) {
+    public List<InventarioResponseDTO> obtenerMovimientosPorProducto(Long productoId) {
         log.info("Obteniendo movimientos de inventario para producto ID: {}", productoId);
         return inventarioRepository.findByProductoIdOrderByCreatedAtDesc(productoId).stream()
                 .map(mov -> toResponse(mov, obtenerNombreProducto(mov.getProductoId())))
@@ -50,7 +50,7 @@ public class InventarioService {
             throw new IllegalArgumentException("Tipo de movimiento inválido: " + request.getTipo()
                     + ". Valores permitidos: ENTRADA, SALIDA, AJUSTE");
         }
-        ProductoResponse producto = productoClient.getProductoById(request.getProductoId());
+        ProductoResponse producto = productoClient.obtenerProductoPorId(request.getProductoId());
         Inventario inventario = Inventario.builder()
                 .productoId(request.getProductoId())
                 .tipo(request.getTipo().toUpperCase())
@@ -61,7 +61,7 @@ public class InventarioService {
         return toResponse(inventario, producto.getNombre());
     }
 
-    public Integer obtenerStockByProducto(Long productoId) {
+    public Integer obtenerStockPorProducto(Long productoId) {
         log.info("Calculando stock para producto ID: {}", productoId);
         List<Inventario> movimientos = inventarioRepository.findByProductoIdOrderByCreatedAtDesc(productoId);
         if (movimientos.isEmpty()) {
@@ -80,12 +80,12 @@ public class InventarioService {
 
     public List<ProductoResponse> obtenerProductos() {
         log.info("Consultando microservicio de productos desde inventario");
-        return productoClient.getProductos();
+        return productoClient.obtenerProductos();
     }
 
     private String obtenerNombreProducto(Long productoId) {
         try {
-            ProductoResponse producto = productoClient.getProductoById(productoId);
+            ProductoResponse producto = productoClient.obtenerProductoPorId(productoId);
             return producto.getNombre();
         } catch (RuntimeException e) {
             log.warn("No se pudo obtener el nombre del producto ID {}: {}", productoId, e.getMessage());
