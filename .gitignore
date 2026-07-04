@@ -1,6 +1,37 @@
-# Ignorar todo excepto el proyecto
-/*
-!/.gitignore
-!/Desktop
-/Desktop/*
-!/Desktop/PlataformaVentaOnline-main
+# Compiled class file
+*.class
+
+# Log files
+*.log
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Build
+target/
+build/
+out/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+*.env.local
